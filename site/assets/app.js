@@ -98,7 +98,7 @@ if (statusForm) {
     const button = statusForm.querySelector("button"); button.disabled = true;
     result(box, "正在读取公开进度", ["请稍等。"]);
     try {
-      const r = await fetch("https://api.github.com/repos/" + config.repository + "/issues/" + number, { headers: { Accept: "application/vnd.github+json" } });
+      const r = await fetch("https://api.github.com/repos/" + config.repository + "/issues/" + number, { cache: "no-store", headers: { Accept: "application/vnd.github+json" } });
       if (!r.ok) throw new Error(r.status === 404 ? "没有找到这份投稿，请核对编号。" : "GitHub读取暂不可用，可能已达到公开查询限制，请直接打开投稿查看。");
       const issue = await r.json();
       if (issue.pull_request) throw new Error("这个编号是代码PR，请使用墓碑投稿的Issue编号。");
@@ -131,7 +131,7 @@ if (findForm) {
     if (!/^CC-\d{6}$/.test(code) && !/^(\d{2})-(\d{2})$/.test(code)) { result(box, "请核对定位信息", ["输入CC-000001或12-34。"]); return; }
     if (!code.startsWith("CC") && code.split("-").some(x => Number(x) < 1 || Number(x) > 64)) { result(box, "定位码超出范围", ["两段数字均为01～64。"]); return; }
     try {
-      const all = await fetch("/memorials.json").then(r => { if (!r.ok) throw new Error(); return r.json(); });
+      const all = await fetch("/memorials.json", { cache: "no-store" }).then(r => { if (!r.ok) throw new Error(); return r.json(); });
       const entry = all.find(x => x.id === code || x.locator === code);
       if (!entry) { result(box, "没有找到公开的纪念", ["这份投稿可能尚未发布、当前不公开，或定位信息来自另一个社区。请核对原回执。"]); return; }
       result(box, entry.title, [entry.id + " · 定位码 " + entry.locator, "网页可以阅读和分享。世界开放后，在入口输入同一码并确认标题。"], { href: "/entries/" + entry.id + "/", text: "打开这份纪念 ↗" });
