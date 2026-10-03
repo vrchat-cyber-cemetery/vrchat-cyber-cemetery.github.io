@@ -1,6 +1,6 @@
 # GitHub侧详细开发计划
 
-日期：2026-10-03。组织：[vrchat-cyber-cemetery](https://github.com/vrchat-cyber-cemetery)。本轮实施GH-00；GH-01～GH-07为后续工作，未因仓库创建而自动视为完成。
+日期：2026-10-03。组织：[vrchat-cyber-cemetery](https://github.com/vrchat-cyber-cemetery)。GH-00已完成，见 [初始化验收](evidence/bootstrap-2026-10-03.json)；GH-01～GH-07为后续工作。
 
 ## 1. 仓库、工作区与交付范围
 
@@ -71,14 +71,14 @@ App私钥仅存主仓库AUTOMATION_APP_PRIVATE_KEY Secret；Client ID放AUTOMATI
 
 ### GH-00 仓库初始化：本轮
 
-- [ ] GH00-01 创建四公开仓库、本地独立Git、main、origin、noreply身份及初始提交。
+- [x] GH00-01 创建四公开仓库、本地独立Git、main、origin、noreply身份及初始提交。
 - [x] GH00-02 原始18文件迁移并核对哈希；外层保留导航和workspace.json。
 - [x] GH00-03 README、MIT、内容授权说明、忽略规则、CODEOWNERS及职责配置。
 - [x] GH00-04 写入本计划和已批准pilot-v1；自动投稿／奖励开关关闭。
-- [ ] GH00-05 基础CI与本地检查，确认四仓库初始推送及远程CI成功。
-- [ ] GH00-06 记录完成证据，所有仓库干净且可从远端拉取。
+- [x] GH00-05 基础CI与本地检查，确认四仓库初始推送及远程CI成功。
+- [x] GH00-06 记录完成证据，四仓库初始提交干净检出与验证通过。
 
-出口：四个仓库与本地目录一致、详细计划已提交、迁移校验和CI通过。进度在验证后回填。
+出口已满足：四仓库对应正确，迁移18文件哈希一致，73本地文档链接／48需求／24验收映射通过，9配置测试＋30模型检查通过；四份初始提交远程CI及干净检出通过。
 
 ### GH-01 基础契约与静态站点
 

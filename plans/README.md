@@ -2,7 +2,7 @@
 
 - 更新日期：2026-10-03（Asia/Shanghai）。
 - 依据：[需求v0.5](../requirements/REQUIREMENTS.md)：共享墓园、静态分享、简化投稿、定位、非VRChat对象、优先GitHub。
-- 状态：GH-00仓库／配置／CI骨架建立中；SDK核验与30项模型通过，Unity／后台发布尚未实现。
+- 状态：GH-00完成，四公开仓库和基础CI已验证；SDK／30项模型与9配置测试通过，Unity／后台发布尚未实现。
 
 ## 1. 结论
 

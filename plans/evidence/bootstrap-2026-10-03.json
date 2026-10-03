@@ -1,0 +1,78 @@
+{
+  "date": "2026-10-03",
+  "milestone": "GH-00",
+  "status": "complete",
+  "scope": "Repository foundation, document migration, approved pilot configuration and basic CI only",
+  "migration": {
+    "files": 18,
+    "hashes_matched_at_move": true,
+    "report": "migration-2026-10-03.json"
+  },
+  "validation": {
+    "documents": 22,
+    "local_links": 73,
+    "requirements": 48,
+    "acceptance_mappings": 24,
+    "configuration_tests": 9,
+    "protocol_model_checks": 30,
+    "clean_checkout": true,
+    "unity_or_vrchat_executed": false
+  },
+  "repositories": [
+    {
+      "name": "vrchat-cyber-cemetery.github.io",
+      "initial_commit": "66186efbbb9f5b930e138f8b8312d8ed6088a0bb",
+      "initial_ci": "https://github.com/vrchat-cyber-cemetery/vrchat-cyber-cemetery.github.io/actions/runs/37081804878",
+      "url": "https://github.com/vrchat-cyber-cemetery/vrchat-cyber-cemetery.github.io",
+      "visibility": "public",
+      "branch": "main",
+      "license": "MIT",
+      "initial_ci_result": "success",
+      "workflow_permissions": "read",
+      "automatic_pr_approval": false
+    },
+    {
+      "name": "world-data-0",
+      "initial_commit": "e8157492f428338ed9e4f5e22c27d439d07691fc",
+      "initial_ci": "https://github.com/vrchat-cyber-cemetery/world-data-0/actions/runs/37081935705",
+      "url": "https://github.com/vrchat-cyber-cemetery/world-data-0",
+      "visibility": "public",
+      "branch": "main",
+      "license": "MIT",
+      "initial_ci_result": "success",
+      "workflow_permissions": "read",
+      "automatic_pr_approval": false
+    },
+    {
+      "name": "world-data-1",
+      "initial_commit": "b44e65e6bfb4b09840af239bc2f46fea9686c1df",
+      "initial_ci": "https://github.com/vrchat-cyber-cemetery/world-data-1/actions/runs/37081935592",
+      "url": "https://github.com/vrchat-cyber-cemetery/world-data-1",
+      "visibility": "public",
+      "branch": "main",
+      "license": "MIT",
+      "initial_ci_result": "success",
+      "workflow_permissions": "read",
+      "automatic_pr_approval": false
+    },
+    {
+      "name": "world",
+      "initial_commit": "f9b19001d39660313c802dc4919d8150a45e649e",
+      "initial_ci": "https://github.com/vrchat-cyber-cemetery/world/actions/runs/37081804931",
+      "url": "https://github.com/vrchat-cyber-cemetery/world",
+      "visibility": "public",
+      "branch": "main",
+      "license": "MIT",
+      "initial_ci_result": "success",
+      "workflow_permissions": "read",
+      "automatic_pr_approval": false
+    }
+  ],
+  "not_implemented": [
+    "GH-01 through GH-07",
+    "GitHub App registration and installation",
+    "Pages deployment",
+    "Real intake and rewards",
+    "Unity world"
+  ]
+}
