@@ -1,0 +1,105 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "policy_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "decision_status": {
+      "const": "approved"
+    },
+    "implementation_status": {
+      "enum": [
+        "not_implemented",
+        "pilot",
+        "operational"
+      ]
+    },
+    "initial_creation_credits": {
+      "const": 1
+    },
+    "identity": {
+      "const": "github_numeric_id"
+    },
+    "vrchat_binding_required": {
+      "const": false
+    },
+    "valid_reviews_per_credit": {
+      "const": 3
+    },
+    "max_rewarded_reviews_per_submission": {
+      "const": 2
+    },
+    "independent_confirmation_required": {
+      "const": true
+    },
+    "invite_credits": {
+      "const": 0
+    },
+    "credits_transferable": {
+      "const": false
+    },
+    "refund_published_removal": {
+      "const": false
+    },
+    "credits_cross_community": {
+      "const": false
+    },
+    "grave_slots_reusable": {
+      "const": false
+    },
+    "real_rewards_enabled": {
+      "type": "boolean"
+    },
+    "automatic_intake_enabled": {
+      "type": "boolean"
+    },
+    "maintainers": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "properties": {
+          "github_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "login": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "required": [
+          "github_id",
+          "login"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema_version",
+    "policy_version",
+    "decision_status",
+    "implementation_status",
+    "initial_creation_credits",
+    "identity",
+    "vrchat_binding_required",
+    "valid_reviews_per_credit",
+    "max_rewarded_reviews_per_submission",
+    "independent_confirmation_required",
+    "invite_credits",
+    "credits_transferable",
+    "refund_published_removal",
+    "credits_cross_community",
+    "grave_slots_reusable",
+    "real_rewards_enabled",
+    "automatic_intake_enabled",
+    "maintainers"
+  ],
+  "additionalProperties": false
+}

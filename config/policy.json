@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "policy_version": "pilot-v1",
+  "decision_status": "approved",
+  "implementation_status": "not_implemented",
+  "initial_creation_credits": 1,
+  "identity": "github_numeric_id",
+  "vrchat_binding_required": false,
+  "valid_reviews_per_credit": 3,
+  "max_rewarded_reviews_per_submission": 2,
+  "independent_confirmation_required": true,
+  "invite_credits": 0,
+  "credits_transferable": false,
+  "refund_published_removal": false,
+  "credits_cross_community": false,
+  "grave_slots_reusable": false,
+  "real_rewards_enabled": false,
+  "automatic_intake_enabled": false,
+  "maintainers": [
+    {
+      "github_id": 11071219,
+      "login": "Ero-Cat"
+    }
+  ]
+}

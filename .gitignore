@@ -1,0 +1,14 @@
+.DS_Store
+node_modules/
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.secrets/
+build/
+dist/
+coverage/
+*.log
+*.bin
+*.dds

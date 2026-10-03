@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "name": "Cyber Cemetery Automation",
+  "status": "not_registered",
+  "webhook_enabled": false,
+  "installation_repositories": [
+    "vrchat-cyber-cemetery.github.io",
+    "world-data-0",
+    "world-data-1"
+  ],
+  "secret_repository": "vrchat-cyber-cemetery.github.io",
+  "client_id_variable": "AUTOMATION_APP_CLIENT_ID",
+  "private_key_secret": "AUTOMATION_APP_PRIVATE_KEY",
+  "permissions": {
+    "metadata": "read",
+    "contents": "write",
+    "pull_requests": "write",
+    "issues": "write",
+    "actions": "write"
+  }
+}

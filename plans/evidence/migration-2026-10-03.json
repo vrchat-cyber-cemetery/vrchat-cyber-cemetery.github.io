@@ -1,0 +1,99 @@
+{
+  "date": "2026-10-03",
+  "sourceWorkspace": "/Users/erocat/Projects/VRChat/cyber-cemetery",
+  "destinationRepository": "vrchat-cyber-cemetery.github.io",
+  "fileCount": 18,
+  "matched": true,
+  "files": [
+    {
+      "path": "CONTEXT.md",
+      "sha256": "0f71e92003150fbf71a0c708bba856a2e6731b6732a7cc60ce1c76939cf08851",
+      "bytes": 2930
+    },
+    {
+      "path": "REQUIREMENTS.md",
+      "sha256": "969520dd3301ed4549ca40a4108262610a8f7e9e6bf6630a14c6c6354a20f386",
+      "bytes": 817
+    },
+    {
+      "path": "plans/COMMUNITY-LOOP.md",
+      "sha256": "99711986e692dc2c720bec3583793d04ee056234725d36c8dff1f2960794bdf6",
+      "bytes": 10637
+    },
+    {
+      "path": "plans/FEASIBILITY.md",
+      "sha256": "79b6ad8684962a1cd5d9b604d04f150dd2fc82478b1cd4a5aa51922da7547340",
+      "bytes": 7276
+    },
+    {
+      "path": "plans/OPTIMIZATION-REVIEW.md",
+      "sha256": "94099ddd0b13f8dacb573f264a09a1f385aacf465637ad5aa1757f79cfcdf0ee",
+      "bytes": 7932
+    },
+    {
+      "path": "plans/README.md",
+      "sha256": "ebf1f6538c584fcc902a11c9623b584986040cfe9e128df11a05b77bff70f103",
+      "bytes": 4585
+    },
+    {
+      "path": "plans/REDESIGN-2026-10-03.md",
+      "sha256": "b54550ada6aeaf05b2e50854a10abcdbfea1a5549fce7a8059115067877bcfe9",
+      "bytes": 4856
+    },
+    {
+      "path": "plans/RUNTIME-DATA.md",
+      "sha256": "0b17f4fd67f4ad162b2ccd8ac4f3ed238e08dcce2fdd94f9078949a44cb4213b",
+      "bytes": 11115
+    },
+    {
+      "path": "plans/SDK-EVIDENCE.md",
+      "sha256": "421d8acc0278056311ead1266550ec41a7e1110483cf4000669012ae9a3305e5",
+      "bytes": 3539
+    },
+    {
+      "path": "plans/SUBMISSION-JOURNEY.md",
+      "sha256": "8836c78501a16ed998eb47f82aa2d83b8db2f6b9ee2ebb7229027429aeab73c8",
+      "bytes": 9459
+    },
+    {
+      "path": "plans/TEST-RELEASE.md",
+      "sha256": "397408e5cfb92d921f99e363cdba32c7d64e0fe351b8f05c8b268b832410fea5",
+      "bytes": 13063
+    },
+    {
+      "path": "plans/UNITY-DEVELOPMENT.md",
+      "sha256": "cb7208995dfcbbe78a90effe064dab225648e8e925b9462f5acd88b80c25d5a5",
+      "bytes": 17647
+    },
+    {
+      "path": "plans/validation/README.md",
+      "sha256": "5676a2b24d83b2d7566f9ef3ae488c2954239965da62cc8c49b4d75324bacfe5",
+      "bytes": 524
+    },
+    {
+      "path": "plans/validation/atomic-pack-model.mjs",
+      "sha256": "fe3b636f38cdf4adb9b94e1c8451d1a17fee01d707b6c4baa4401817fcd5b283",
+      "bytes": 8577
+    },
+    {
+      "path": "requirements/GOVERNANCE.md",
+      "sha256": "1858667b84b3f0c8df084f750e022c5f9c69f1fe5955471894f2ae37fa84bf84",
+      "bytes": 15696
+    },
+    {
+      "path": "requirements/README.md",
+      "sha256": "b3b10eede35f38a06ea768c66e0d3a9e5680087a1210e938560bb0f08aa222c9",
+      "bytes": 2316
+    },
+    {
+      "path": "requirements/REQUIREMENTS.md",
+      "sha256": "647c7952a5ef052c74570cf357644907b2fa61b5b8c2bd137f10c2e549fe477d",
+      "bytes": 43698
+    },
+    {
+      "path": "requirements/REVIEW-v0.2.md",
+      "sha256": "aceb94e0d520338bb3e44b32cc4798e90180e9b94ae920f0829971b667580d92",
+      "bytes": 6317
+    }
+  ]
+}

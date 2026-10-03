@@ -1,0 +1,84 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status": {
+      "enum": [
+        "not_registered",
+        "installed"
+      ]
+    },
+    "webhook_enabled": {
+      "const": false
+    },
+    "installation_repositories": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      },
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true
+    },
+    "secret_repository": {
+      "type": "string",
+      "minLength": 1
+    },
+    "client_id_variable": {
+      "type": "string",
+      "pattern": "^[A-Z0-9_]+$"
+    },
+    "private_key_secret": {
+      "type": "string",
+      "pattern": "^[A-Z0-9_]+$"
+    },
+    "permissions": {
+      "type": "object",
+      "properties": {
+        "metadata": {
+          "const": "read"
+        },
+        "contents": {
+          "const": "write"
+        },
+        "pull_requests": {
+          "const": "write"
+        },
+        "issues": {
+          "const": "write"
+        },
+        "actions": {
+          "const": "write"
+        }
+      },
+      "required": [
+        "metadata",
+        "contents",
+        "pull_requests",
+        "issues",
+        "actions"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "name",
+    "status",
+    "webhook_enabled",
+    "installation_repositories",
+    "secret_repository",
+    "client_id_variable",
+    "private_key_secret",
+    "permissions"
+  ],
+  "additionalProperties": false
+}

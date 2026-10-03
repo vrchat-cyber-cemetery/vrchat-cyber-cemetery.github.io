@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 当前尚未开放墓碑投稿
+    url: https://github.com/vrchat-cyber-cemetery/vrchat-cyber-cemetery.github.io/blob/main/plans/GITHUB-DEVELOPMENT.md
+    about: 请先阅读开发进度与投稿指南；表单将在GH-02验收后开放。

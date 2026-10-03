@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "organization": "vrchat-cyber-cemetery",
+  "community_id": "vrchat-cyber-cemetery",
+  "default_branch": "main",
+  "repositories": {
+    "main": "vrchat-cyber-cemetery.github.io",
+    "shards": [
+      "world-data-0",
+      "world-data-1"
+    ],
+    "world": "world"
+  },
+  "site_base": "https://vrchat-cyber-cemetery.github.io",
+  "data_site_bases": [
+    "https://vrchat-cyber-cemetery.github.io/world-data-0",
+    "https://vrchat-cyber-cemetery.github.io/world-data-1"
+  ],
+  "protocol_version": 1,
+  "layout_version": "cemetery-v1",
+  "capacity": {
+    "regions": 64,
+    "slots_per_region": 64,
+    "entries_per_pack": 8,
+    "pack_count": 512
+  },
+  "budgets": {
+    "max_pack_bytes": 2228256,
+    "site_bytes": 734003200
+  },
+  "publication": {
+    "status": "not_initialized",
+    "pages_enabled": false,
+    "vrchat_world_id": null
+  }
+}

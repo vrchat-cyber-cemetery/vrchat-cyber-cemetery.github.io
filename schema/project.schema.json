@@ -1,0 +1,152 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "organization": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$"
+    },
+    "community_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "default_branch": {
+      "const": "main"
+    },
+    "repositories": {
+      "type": "object",
+      "properties": {
+        "main": {
+          "type": "string",
+          "minLength": 1
+        },
+        "shards": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 2,
+          "maxItems": 2,
+          "uniqueItems": true
+        },
+        "world": {
+          "type": "string",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "main",
+        "shards",
+        "world"
+      ],
+      "additionalProperties": false
+    },
+    "site_base": {
+      "type": "string",
+      "pattern": "^https://"
+    },
+    "data_site_bases": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^https://"
+      },
+      "minItems": 2,
+      "maxItems": 2,
+      "uniqueItems": true
+    },
+    "protocol_version": {
+      "const": 1
+    },
+    "layout_version": {
+      "type": "string",
+      "minLength": 1
+    },
+    "capacity": {
+      "type": "object",
+      "properties": {
+        "regions": {
+          "const": 64
+        },
+        "slots_per_region": {
+          "const": 64
+        },
+        "entries_per_pack": {
+          "const": 8
+        },
+        "pack_count": {
+          "const": 512
+        }
+      },
+      "required": [
+        "regions",
+        "slots_per_region",
+        "entries_per_pack",
+        "pack_count"
+      ],
+      "additionalProperties": false
+    },
+    "budgets": {
+      "type": "object",
+      "properties": {
+        "max_pack_bytes": {
+          "const": 2228256
+        },
+        "site_bytes": {
+          "const": 734003200
+        }
+      },
+      "required": [
+        "max_pack_bytes",
+        "site_bytes"
+      ],
+      "additionalProperties": false
+    },
+    "publication": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "not_initialized",
+            "pilot",
+            "operational"
+          ]
+        },
+        "pages_enabled": {
+          "type": "boolean"
+        },
+        "vrchat_world_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "required": [
+        "status",
+        "pages_enabled",
+        "vrchat_world_id"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema_version",
+    "organization",
+    "community_id",
+    "default_branch",
+    "repositories",
+    "site_base",
+    "data_site_bases",
+    "protocol_version",
+    "layout_version",
+    "capacity",
+    "budgets",
+    "publication"
+  ],
+  "additionalProperties": false
+}
