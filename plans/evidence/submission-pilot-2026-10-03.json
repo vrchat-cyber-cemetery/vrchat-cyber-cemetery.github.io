@@ -1,0 +1,48 @@
+{
+  "date": "2026-10-03",
+  "scope": "First operational single-repository memorial submission and website pilot",
+  "site": "https://vrchat-cyber-cemetery.github.io/",
+  "transport": "same_repository",
+  "features": [
+    "Native GitHub Issue Forms",
+    "Website draft and preview",
+    "Image normalization",
+    "Revision-bound maintainer approval",
+    "Initial creation credit and idempotent consumption",
+    "Git compare-and-swap source update",
+    "Share page and reserved location",
+    "Status lookup",
+    "Controlled visibility changes"
+  ],
+  "local": {
+    "business_and_configuration_tests": 34,
+    "protocol_model_checks": 30,
+    "responsive_ui_checked": true,
+    "long_draft_transfer_checked": true,
+    "unchecked_consent_blocks_navigation": true
+  },
+  "cloud": {
+    "ci": "https://github.com/vrchat-cyber-cemetery/vrchat-cyber-cemetery.github.io/actions/runs/37087949516",
+    "deployment": "https://github.com/vrchat-cyber-cemetery/vrchat-cyber-cemetery.github.io/actions/runs/37087949574",
+    "both_succeeded": true,
+    "intake_smoke_issue": "https://github.com/vrchat-cyber-cemetery/vrchat-cyber-cemetery.github.io/issues/1",
+    "intake": "https://github.com/vrchat-cyber-cemetery/vrchat-cyber-cemetery.github.io/actions/runs/37088057269",
+    "intake_succeeded": true,
+    "self_approval_negative_test": "https://github.com/vrchat-cyber-cemetery/vrchat-cyber-cemetery.github.io/actions/runs/37088178256",
+    "self_approval_denied": true,
+    "negative_test_expected_failure": true,
+    "no_member_credit_or_slot_consumed": true,
+    "smoke_issue_closed": true
+  },
+  "not_live": [
+    "VRChat world",
+    "Automatic review credit exchange",
+    "GitHub App-generated PRs",
+    "Cross-repository BC1 publication"
+  ],
+  "publication_checks": {
+    "form_html_live": true,
+    "share_png": "1200x630",
+    "approved_entry_count": 0
+  }
+}

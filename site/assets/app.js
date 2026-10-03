@@ -111,7 +111,9 @@ if (statusForm) {
         "submission:published": ["网页已发布", "打开原投稿查看分享页与定位码。VRChat世界仍在建设，网页发布不等于世界可参观。"],
         "submission:withdrawn": ["内容当前不公开", "请在原投稿查看处理记录；此页不显示被撤下正文。"]
       };
-      const status = statuses[key] || ["投稿已提交", "处理尚未开始，或这是一般内容请求；请在原Issue查看进度。"];
+      const status = issue.state === "closed" && !["submission:published", "submission:withdrawn"].includes(key)
+        ? ["投稿已关闭", "此Issue当前已关闭。若需继续处理，请在原投稿联系维护者。"]
+        : statuses[key] || ["投稿已提交", "处理尚未开始，或这是一般内容请求；请在原Issue查看进度。"];
       result(box, status[0], ["投稿 #" + number, status[1]], { href: issue.html_url, text: "打开原投稿与回执 ↗" });
       history.replaceState(null, "", "?issue=" + number);
     } catch (error) { result(box, "暂时无法读取进度", [error.message], { href: "https://github.com/" + config.repository + "/issues/" + number, text: "直接打开GitHub查看 ↗" }); }
