@@ -29,8 +29,8 @@
     "site_bytes": 734003200
   },
   "publication": {
-    "status": "not_initialized",
-    "pages_enabled": false,
+    "status": "pilot",
+    "pages_enabled": true,
     "vrchat_world_id": null
   }
 }

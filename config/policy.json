@@ -2,7 +2,7 @@
   "schema_version": 1,
   "policy_version": "pilot-v1",
   "decision_status": "approved",
-  "implementation_status": "not_implemented",
+  "implementation_status": "pilot",
   "initial_creation_credits": 1,
   "identity": "github_numeric_id",
   "vrchat_binding_required": false,
@@ -15,11 +15,12 @@
   "credits_cross_community": false,
   "grave_slots_reusable": false,
   "real_rewards_enabled": false,
-  "automatic_intake_enabled": false,
+  "automatic_intake_enabled": true,
   "maintainers": [
     {
       "github_id": 11071219,
       "login": "Ero-Cat"
     }
-  ]
+  ],
+  "intake_mode": "same_repository"
 }

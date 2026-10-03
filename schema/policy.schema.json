@@ -79,6 +79,12 @@
         ],
         "additionalProperties": false
       }
+    },
+    "intake_mode": {
+      "enum": [
+        "app",
+        "same_repository"
+      ]
     }
   },
   "required": [

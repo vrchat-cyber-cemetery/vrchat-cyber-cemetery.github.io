@@ -2,7 +2,7 @@
 
 ## 当前阶段
 
-当前实施GH-00。开发者通过PR改进代码和计划；普通用户的墓碑表单将在GH-02完成验收后开放。
+开发者通过PR改进代码和计划；普通用户使用[投稿页面](https://vrchat-cyber-cemetery.github.io/create/)或GitHub Issue表单，无需JSON或Fork。
 
 ## 开发步骤
 
@@ -12,7 +12,7 @@
 
 自动化和政策修改需维护者审核。GitHub账号稳定数字ID作为额度主体，VRChat绑定可选。
 
-## 未来投稿流程
+## 投稿流程
 
 用户填表和拖放图片即可，不需要写JSON、Fork或创建PR。先收到投稿回执，实际部署成功后再收到分享页、ID、定位码和发布版本。详见[提交旅程](plans/SUBMISSION-JOURNEY.md)。
 

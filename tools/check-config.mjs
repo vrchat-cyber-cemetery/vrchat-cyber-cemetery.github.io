@@ -31,7 +31,9 @@ export function validateConfigurations(data) {
   const ids = policy.maintainers.map(member => member.github_id);
   if (new Set(ids).size !== ids.length) errors.push("Maintainer numeric identities must be unique");
   if (policy.real_rewards_enabled && ids.length < 2) errors.push("Real rewards require two independent maintainers");
-  if ((policy.real_rewards_enabled || policy.automatic_intake_enabled) && (app.status !== "installed" || policy.implementation_status === "not_implemented")) errors.push("Automation cannot be enabled before its App and implementation are ready");
+  if (policy.real_rewards_enabled && app.status !== "installed") errors.push("Real rewards require the registered automation App");
+  if (policy.automatic_intake_enabled && policy.intake_mode !== "same_repository" && app.status !== "installed") errors.push("App-mode intake cannot be enabled before its App is ready");
+  if ((policy.real_rewards_enabled || policy.automatic_intake_enabled) && policy.implementation_status === "not_implemented") errors.push("Automation cannot be enabled before its implementation is ready");
   return errors;
 }
 
@@ -40,5 +42,5 @@ if (process.argv[1] && path.resolve(process.argv[1]) === fileURLToPath(import.me
   if (errors.length) {
     console.error(errors.join("\n"));
     process.exitCode = 1;
-  } else console.log("PASS project, approved pilot policy, and disabled automation configuration");
+  } else console.log("PASS project and approved policy: intake=" + readConfigurations().policy.automatic_intake_enabled + ", rewards=" + readConfigurations().policy.real_rewards_enabled);
 }

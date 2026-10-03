@@ -3,7 +3,7 @@ import assert from "node:assert/strict";
 import { readConfigurations, validateConfigurations } from "../tools/check-config.mjs";
 const fresh = () => structuredClone(readConfigurations());
 
-test("approved pilot configuration validates with automation off", () => assert.deepEqual(validateConfigurations(fresh()), []));
+test("approved same-repository pilot validates without enabling rewards", () => assert.deepEqual(validateConfigurations(fresh()), []));
 test("incorrect organization site is rejected", () => {
   const config = fresh(); config.project.site_base = "https://example.com";
   assert(validateConfigurations(config).some(error => error.includes("Main site")));
@@ -33,6 +33,6 @@ test("real rewards remain disabled until independent confirmation is possible", 
   assert(validateConfigurations(config).some(error => error.includes("independent")));
 });
 test("intake cannot be enabled while the App is unregistered", () => {
-  const config = fresh(); config.policy.automatic_intake_enabled = true;
+  const config = fresh(); config.policy.automatic_intake_enabled = true; config.policy.intake_mode = "app";
   assert(validateConfigurations(config).some(error => error.includes("ready")));
 });

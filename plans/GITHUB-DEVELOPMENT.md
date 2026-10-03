@@ -1,6 +1,6 @@
 # GitHub侧详细开发计划
 
-日期：2026-10-03。组织：[vrchat-cyber-cemetery](https://github.com/vrchat-cyber-cemetery)。GH-00已完成，见 [初始化验收](evidence/bootstrap-2026-10-03.json)；GH-01～GH-07为后续工作。
+日期：2026-10-03。组织：[vrchat-cyber-cemetery](https://github.com/vrchat-cyber-cemetery)。GH-00完成，当前上线同仓库投稿／网页试点，范围见[手册](../docs/OPERATIONS.md)。未勾选任务仍是后续工作。
 
 ## 1. 仓库、工作区与交付范围
 
@@ -21,7 +21,7 @@
 - 内容：九种buried_type，0～3相关玩家，每碑最多七张逻辑图片，正式ID与固定墓位独立。
 - 运行时：64区×64槽，8碑一组，512原子包，577预置地址；详见[运行时计划](RUNTIME-DATA.md)。
 - 构建：GitHub托管Windows runner运行固定版本／校验值的DirectXTex texconv；不自建常驻服务。
-- 当前状态：config/project.json的Pages未启用；config/policy.json的自动投稿与真实奖励关闭；config/automation-app.json标记未注册。
+- 当前状态：Pages按Actions发布静态产物，自动校验启用；same_repository模式人工审核发布，评审兑换关闭，App未注册。
 - 身份：社区成员使用GitHub数字账号ID，VRChat绑定可选；不以显示名或实例playerId领取额度。
 
 ### 2.1 试点政策 pilot-v1
@@ -34,7 +34,7 @@
 
 ## 3. GitHub App与权限
 
-采用组织所有的Cyber Cemetery Automation App，关闭webhook，只安装主仓库和两分片。安装一次后由Actions取得短期令牌，无接收请求的个人服务器。
+完整计划采用组织App。凭据未配置时，同仓库试点使用GITHUB_TOKEN处理回执、审核和显式workflow_dispatch发布；不自动生成PR。App就绪后再接入自动PR／跨仓库，继续限定安装范围。
 
 | 作业 | 令牌与目标 |
 | --- | --- |

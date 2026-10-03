@@ -4,7 +4,7 @@
 
 ## 当前进度
 
-已建立仓库与文档骨架。GH-00负责初始化；站点发布、投稿处理、真实奖励和Unity世界在后续阶段实现，当前未开放真实墓碑投稿。
+投稿网页和同仓库Actions试点已实现：填写、GitHub附件、自动校验、人工审核、初始额度消费、网页发布与预留定位码。VRChat世界、自动评审兑换和App跨仓库发布仍在后续阶段。
 
 ## 开发入口
 
@@ -19,11 +19,11 @@
 
 本仓库是内容与治理的权威来源。两个数据仓库仅发布图文包；[world](https://github.com/vrchat-cyber-cemetery/world)保存世界工程。
 
-计划主站：<https://vrchat-cyber-cemetery.github.io/>。Pages尚未启用；不将仓库存在等同于站点已上线。
+主站：<https://vrchat-cyber-cemetery.github.io/>。Pages只发布构建的静态页面，不复制源码、成员或账本目录。维护步骤见[试点手册](docs/OPERATIONS.md)。
 
 ## 本地验证
 
-使用Node.js24，执行 npm ci、npm run check。检查包括文档链接、JSON配置、工具测试和原有30项协议模型检查。
+使用Node.js24，执行npm ci、npm run check、npm run build:site；验证文档、配置、业务规则、图片处理和30项协议模型。npm run preview用于本地检查。
 
 ## 许可
 

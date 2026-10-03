@@ -1,0 +1,23 @@
+name: 举报或请求撤下
+description: 说明问题，维护者复核；请不要在公开请求中复述私密材料。
+title: '[内容请求] '
+labels: ['community:request', 'submission:received']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请求是公开的。请仅提供定位信息和必要说明，不要贴出证件、私人聊天或联系方式。
+  - type: input
+    id: entry_id
+    attributes:
+      label: '墓碑 ID'
+      placeholder: CC-000001
+    validations:
+      required: true
+  - type: textarea
+    id: reason
+    attributes:
+      label: '请求说明'
+      placeholder: 说明需要核验、更正或停止展示的问题。
+    validations:
+      required: true

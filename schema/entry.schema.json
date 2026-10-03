@@ -1,0 +1,207 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^CC-\\d{6}$"
+    },
+    "status": {
+      "enum": [
+        "published",
+        "hidden",
+        "disputed",
+        "removed"
+      ]
+    },
+    "title": {
+      "type": "string",
+      "maxLength": 240
+    },
+    "buried_type": {
+      "enum": [
+        "person",
+        "identity",
+        "relationship",
+        "memory",
+        "community",
+        "project",
+        "event",
+        "concept",
+        "other"
+      ]
+    },
+    "buried_subject": {
+      "type": "string",
+      "maxLength": 240
+    },
+    "epitaph": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "story": {
+      "type": "string",
+      "maxLength": 4000
+    },
+    "date_note": {
+      "type": "string",
+      "maxLength": 500
+    },
+    "tags": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "string",
+        "maxLength": 24
+      }
+    },
+    "links": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "string",
+        "pattern": "^https?://\\S+$"
+      }
+    },
+    "players": {
+      "type": "array",
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "properties": {
+          "display_name": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 80
+          },
+          "profile_url": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^https://vrchat\\.com/home/user/usr_[a-z0-9-]+$"
+          }
+        },
+        "required": [
+          "display_name",
+          "profile_url"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "images": {
+      "type": "object",
+      "properties": {
+        "main": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "pattern": "^media/[a-f0-9]{64}\\.jpg$"
+        },
+        "memorial": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^media/[a-f0-9]{64}\\.jpg$"
+          }
+        },
+        "avatars": {
+          "type": "array",
+          "maxItems": 3,
+          "items": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^media/[a-f0-9]{64}\\.jpg$"
+          }
+        }
+      },
+      "required": [
+        "main",
+        "memorial",
+        "avatars"
+      ],
+      "additionalProperties": false
+    },
+    "slot": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4095
+    },
+    "locator": {
+      "type": "string",
+      "pattern": "^\\d{2}-\\d{2}$"
+    },
+    "creator_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "creator_login": {
+      "type": "string",
+      "maxLength": 39
+    },
+    "issue_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "request_issue_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "approved_revision": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "approved_by": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "updated_at": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "publication_sequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "world_status": {
+      "const": "awaiting_world"
+    }
+  },
+  "required": [
+    "schema_version",
+    "id",
+    "status",
+    "title",
+    "buried_type",
+    "buried_subject",
+    "epitaph",
+    "story",
+    "date_note",
+    "tags",
+    "links",
+    "players",
+    "images",
+    "slot",
+    "locator",
+    "creator_id",
+    "creator_login",
+    "issue_number",
+    "request_issue_number",
+    "approved_revision",
+    "approved_by",
+    "updated_at",
+    "publication_sequence",
+    "world_status"
+  ],
+  "additionalProperties": false
+}

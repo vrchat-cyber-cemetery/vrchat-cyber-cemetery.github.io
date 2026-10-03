@@ -1,0 +1,115 @@
+name: 修改已有纪念
+description: 用墓碑ID提出修改，不需要编辑JSON。
+title: '[内容修改] '
+labels: ['community:submission', 'submission:received']
+body:
+  - type: markdown
+    attributes:
+      value: |
+        可以纪念本人、他人或非人物对象，不要求是VRChat玩家。
+        本Issue及附件公开，请勿提供证件、私人聊天、联系方式或登录凭据。
+        图片须在下面的附件区上传；本站的本地预览不会上传图片。
+        审核后才会发布到网站，VRChat世界仍在建设。
+  - type: input
+    id: entry_id
+    attributes:
+      label: '墓碑 ID'
+      placeholder: CC-000001
+    validations:
+      required: true
+  - type: input
+    id: subject
+    attributes:
+      label: "这里埋葬了什么"
+      placeholder: "我们未完成的世界"
+    validations:
+      required: true
+  - type: input
+    id: buried_type
+    attributes:
+      label: "对象类型"
+      description: "网站会带入中文类型；直接提交可填人物、网络身份、一段关系、一段记忆、一个社区、项目或世界、事件或时代、抽象事物或其他。"
+      placeholder: "例如：一段记忆"
+    validations:
+      required: true
+  - type: input
+    id: title
+    attributes:
+      label: "自定义标题"
+      placeholder: "可留空"
+    validations:
+      required: false
+  - type: textarea
+    id: epitaph
+    attributes:
+      label: "墓志铭"
+      placeholder: "一句想留下的话"
+    validations:
+      required: false
+  - type: textarea
+    id: story
+    attributes:
+      label: "故事"
+      placeholder: "发生过什么，为什么你想记住它"
+    validations:
+      required: false
+  - type: input
+    id: date_note
+    attributes:
+      label: "日期与含义"
+      placeholder: "例如：结束日期 2024年夏天"
+    validations:
+      required: false
+  - type: input
+    id: tags
+    attributes:
+      label: "标签"
+      placeholder: "用逗号分隔，最多8个"
+    validations:
+      required: false
+  - type: textarea
+    id: links
+    attributes:
+      label: "相关链接"
+      placeholder: "每行一个http或https链接"
+    validations:
+      required: false
+  - type: textarea
+    id: players
+    attributes:
+      label: "相关玩家"
+      placeholder: "每行一位，最多3位。展示名 | 可选VRChat公开资料链接"
+    validations:
+      required: false
+  - type: textarea
+    id: main_image
+    attributes:
+      label: "主图"
+      placeholder: "最多一张。把图片拖入这里，JPG、PNG、WebP，单图最多16MB"
+    validations:
+      required: false
+  - type: textarea
+    id: memorial_images
+    attributes:
+      label: "纪念图片"
+      placeholder: "最多三张，拖入图片作为GitHub附件"
+    validations:
+      required: false
+  - type: textarea
+    id: player_avatars
+    attributes:
+      label: "玩家头像"
+      placeholder: "每位相关玩家最多一张，按相关玩家的行顺序上传"
+    validations:
+      required: false
+  - type: checkboxes
+    id: consent
+    attributes:
+      label: "公开与授权"
+      options:
+        - label: "我理解投稿、图片和Git历史会公开。"
+          required: true
+        - label: "我具备文字和图片使用授权。"
+          required: true
+        - label: "涉及他人时已取得同意，不捏造死亡或公开隐私。"
+          required: true
