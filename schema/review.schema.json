@@ -1,0 +1,98 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "Data class: source. Structured review of one submission revision; support, request_changes and reject share one quality bar. Self or conflicted reviews are stored but never rewarded.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "review_id": {
+      "type": "string",
+      "pattern": "^RV-\\d{6}$"
+    },
+    "submission_issue_number": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "reviewed_revision": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "$comment": "Reviews bind to the exact submission revision; a newer revision invalidates the review."
+    },
+    "reviewer": {
+      "type": "object",
+      "properties": {
+        "github_id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "login": {
+          "type": "string",
+          "maxLength": 39
+        }
+      },
+      "required": [
+        "github_id",
+        "login"
+      ],
+      "additionalProperties": false
+    },
+    "position": {
+      "enum": [
+        "support",
+        "request_changes",
+        "reject"
+      ]
+    },
+    "statement": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 4000
+    },
+    "conflict_of_interest": {
+      "type": "boolean",
+      "$comment": "True when the reviewer authored or is otherwise interested in the submission; such reviews cannot count toward exchange."
+    },
+    "independent_confirmation": {
+      "type": [
+        "object",
+        "null"
+      ],
+      "properties": {
+        "confirmed_by": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "confirmed_at": {
+          "type": "string",
+          "maxLength": 40
+        }
+      },
+      "required": [
+        "confirmed_by",
+        "confirmed_at"
+      ],
+      "additionalProperties": false
+    },
+    "rewarded": {
+      "type": "boolean"
+    },
+    "submitted_at": {
+      "type": "string",
+      "maxLength": 40
+    }
+  },
+  "required": [
+    "schema_version",
+    "review_id",
+    "submission_issue_number",
+    "reviewed_revision",
+    "reviewer",
+    "position",
+    "statement",
+    "conflict_of_interest",
+    "rewarded",
+    "submitted_at"
+  ],
+  "additionalProperties": false
+}

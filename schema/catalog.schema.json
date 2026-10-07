@@ -1,0 +1,70 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "Data class: runtime export. Generated root catalog.json; not hand-edited. The world keeps one copy and never rolls back to an older accepted sequence.",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "const": 1
+    },
+    "community_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "layout_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40
+    },
+    "publication_sequence": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "world_status": {
+      "enum": [
+        "awaiting_world",
+        "live"
+      ]
+    },
+    "regions": {
+      "type": "array",
+      "minItems": 64,
+      "maxItems": 64,
+      "items": {
+        "type": "object",
+        "properties": {
+          "region": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 63
+          },
+          "published_count": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 64
+          },
+          "revision": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "region",
+          "published_count",
+          "revision"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "schema",
+    "community_id",
+    "layout_version",
+    "publication_sequence",
+    "world_status",
+    "regions"
+  ],
+  "additionalProperties": false
+}

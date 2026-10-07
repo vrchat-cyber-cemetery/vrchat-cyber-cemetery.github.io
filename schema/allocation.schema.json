@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "Data class: source. Decision record explaining why a member holds credits; stored under allocations/ and distinct from the immutable ledger rows it produces.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "allocation_id": {
+      "type": "string",
+      "pattern": "^AL-\\d{6}$"
+    },
+    "member_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "amount": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "reason": {
+      "enum": [
+        "initial",
+        "review-exchange",
+        "compensation"
+      ]
+    },
+    "evidence": {
+      "type": "array",
+      "maxItems": 16,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 200
+      },
+      "$comment": "Review IDs or maintenance references backing the allocation."
+    },
+    "granted_at": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "operation_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    }
+  },
+  "required": [
+    "schema_version",
+    "allocation_id",
+    "member_id",
+    "amount",
+    "reason",
+    "granted_at",
+    "operation_id"
+  ],
+  "additionalProperties": false
+}

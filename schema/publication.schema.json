@@ -1,0 +1,111 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "Data class: source. Release request and outcome; at minimum a monotonic sequence, source commit, protocol/layout identity and per-archive SHA-256.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "publication_id": {
+      "type": "string",
+      "pattern": "^PB-\\d{6}$"
+    },
+    "publication_sequence": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "source_sha": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "protocol_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "layout_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40
+    },
+    "status": {
+      "enum": [
+        "requested",
+        "building",
+        "shards-deployed",
+        "activated",
+        "failed",
+        "withdrawn"
+      ]
+    },
+    "archives": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "properties": {
+          "repository": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 100
+          },
+          "role": {
+            "enum": [
+              "main",
+              "shard-0",
+              "shard-1"
+            ]
+          },
+          "url": {
+            "type": "string",
+            "pattern": "^https://"
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "required": [
+          "repository",
+          "role",
+          "url",
+          "sha256",
+          "bytes"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "requested_by": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "requested_at": {
+      "type": "string",
+      "maxLength": 40
+    },
+    "activated_at": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "maxLength": 40
+    }
+  },
+  "required": [
+    "schema_version",
+    "publication_id",
+    "publication_sequence",
+    "source_sha",
+    "protocol_version",
+    "layout_version",
+    "status",
+    "archives",
+    "requested_by",
+    "requested_at"
+  ],
+  "additionalProperties": false
+}

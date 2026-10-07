@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "Data class: source. Authoritative member identity and credit balance tracked by GitHub numeric ID; renames never re-grant.",
+  "type": "object",
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "github_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "login": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 39
+    },
+    "credits": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "initial_grant": {
+      "type": "boolean"
+    },
+    "vrchat_user_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^usr_[a-z0-9-]+$"
+    },
+    "registered_at": {
+      "type": "string",
+      "maxLength": 40
+    }
+  },
+  "required": [
+    "schema_version",
+    "github_id",
+    "login",
+    "credits",
+    "initial_grant"
+  ],
+  "additionalProperties": false
+}

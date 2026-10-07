@@ -1,0 +1,86 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "Data class: source. Envelope stored as ledger/<operation>.json; it links community operations to their ledger rows.",
+  "type": "object",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "operation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "issue_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "approved_by": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "events": {
+          "type": "array",
+          "minItems": 0,
+          "maxItems": 32,
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "required": [
+        "operation_id",
+        "policy_version",
+        "issue_number",
+        "approved_by",
+        "events"
+      ],
+      "additionalProperties": false,
+      "$comment": "Publish envelope; every item of events satisfies ledger-event.schema.json."
+    },
+    {
+      "type": "object",
+      "properties": {
+        "operation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "entry_id": {
+          "type": "string",
+          "pattern": "^CC-\\d{6}$"
+        },
+        "status": {
+          "enum": [
+            "published",
+            "hidden",
+            "disputed",
+            "removed"
+          ]
+        },
+        "approved_by": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timestamp": {
+          "type": "string",
+          "maxLength": 40
+        }
+      },
+      "required": [
+        "operation_id",
+        "entry_id",
+        "status",
+        "approved_by",
+        "timestamp"
+      ],
+      "additionalProperties": false,
+      "$comment": "Visibility envelope for hide, dispute, remove and restore."
+    }
+  ]
+}

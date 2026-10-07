@@ -88,7 +88,7 @@ App私钥仅存主仓库AUTOMATION_APP_PRIVATE_KEY Secret；Client ID放AUTOMATI
 
 ### GH-01 基础契约与静态站点
 
-- [ ] GH01-01 实现entry、member、review、ledger-event、allocation和publication的完整Schema，区分源数据／运行时导出。
+- [x] GH01-01 实现entry、member、review、ledger-event、allocation和publication的完整Schema，区分源数据／运行时导出。
 - [ ] GH01-02 根据config生成真实站点配置与577固定地址清单，供world编辑器工具导入。
 - [x] GH01-03 首页、投稿／评审指南及世界未上线提示；不输出虚构世界ID。
 - [ ] GH01-04 空目录、64区概要、512小型无图组包及HTTP直链检查。

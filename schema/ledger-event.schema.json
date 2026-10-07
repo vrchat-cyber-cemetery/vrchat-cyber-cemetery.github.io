@@ -1,0 +1,58 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "Data class: source. One immutable credit ledger row; replaying an operation_id must never produce a second row.",
+  "type": "object",
+  "properties": {
+    "operation_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 200
+    },
+    "kind": {
+      "enum": [
+        "initial-grant",
+        "creation-consume",
+        "review-credit",
+        "review-exchange",
+        "compensation"
+      ]
+    },
+    "member_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "amount": {
+      "type": "integer",
+      "not": {
+        "const": 0
+      },
+      "$comment": "Grants are positive, consumption negative; a zero row carries no information and is rejected."
+    },
+    "entry_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^CC-\\d{6}$"
+    },
+    "review_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "pattern": "^RV-\\d{6}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "maxLength": 40
+    }
+  },
+  "required": [
+    "operation_id",
+    "kind",
+    "member_id",
+    "amount",
+    "timestamp"
+  ],
+  "additionalProperties": false
+}

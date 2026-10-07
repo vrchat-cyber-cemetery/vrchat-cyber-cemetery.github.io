@@ -1,0 +1,166 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "Data class: runtime export. JSON payload embedded in packs/NNN.bin after the 32-byte CCPACK01 header; metadata and BC1 pixels travel in one download. Unpublished positions are null.",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "const": 1
+    },
+    "community_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "layout_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40
+    },
+    "region": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 63
+    },
+    "group": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 7
+    },
+    "revision": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "additionalItems": false,
+      "items": [
+        { "allOf": [{ "$ref": "#/definitions/position" }, { "type": ["object", "null"], "properties": { "slot": { "const": 0 } } }] },
+        { "allOf": [{ "$ref": "#/definitions/position" }, { "type": ["object", "null"], "properties": { "slot": { "const": 1 } } }] },
+        { "allOf": [{ "$ref": "#/definitions/position" }, { "type": ["object", "null"], "properties": { "slot": { "const": 2 } } }] },
+        { "allOf": [{ "$ref": "#/definitions/position" }, { "type": ["object", "null"], "properties": { "slot": { "const": 3 } } }] },
+        { "allOf": [{ "$ref": "#/definitions/position" }, { "type": ["object", "null"], "properties": { "slot": { "const": 4 } } }] },
+        { "allOf": [{ "$ref": "#/definitions/position" }, { "type": ["object", "null"], "properties": { "slot": { "const": 5 } } }] },
+        { "allOf": [{ "$ref": "#/definitions/position" }, { "type": ["object", "null"], "properties": { "slot": { "const": 6 } } }] },
+        { "allOf": [{ "$ref": "#/definitions/position" }, { "type": ["object", "null"], "properties": { "slot": { "const": 7 } } }] }
+      ],
+      "$comment": "Tuple validation pins array position to in-group slot, mirroring the runtime rejection of misbound slots."
+    }
+  },
+  "definitions": {
+    "position": {
+      "oneOf": [
+        { "type": "null" },
+        {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "pattern": "^CC-\\d{6}$"
+            },
+            "slot": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 7
+            },
+            "revision": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            },
+            "title": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "buried_type": {
+              "enum": [
+                "person",
+                "identity",
+                "relationship",
+                "memory",
+                "community",
+                "project",
+                "event",
+                "concept",
+                "other"
+              ]
+            },
+            "buried_subject": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 240
+            },
+            "epitaph": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "story": {
+              "type": "string",
+              "maxLength": 4000
+            },
+            "date_note": {
+              "type": "string",
+              "maxLength": 500
+            },
+            "images": {
+              "type": "object",
+              "properties": {
+                "main": {
+                  "type": "boolean"
+                },
+                "memorial": {
+                  "type": "array",
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "items": {
+                    "type": "boolean"
+                  }
+                },
+                "avatars": {
+                  "type": "array",
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "items": {
+                    "type": "boolean"
+                  }
+                }
+              },
+              "required": [
+                "main",
+                "memorial",
+                "avatars"
+              ],
+              "additionalProperties": false,
+              "$comment": "Presence flags for the 7 logical images rendered into the group atlas; pixels stay in the same pack."
+            }
+          },
+          "required": [
+            "id",
+            "slot",
+            "revision",
+            "title",
+            "buried_type",
+            "buried_subject",
+            "epitaph",
+            "story",
+            "date_note",
+            "images"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "required": [
+    "schema",
+    "community_id",
+    "layout_version",
+    "region",
+    "group",
+    "revision",
+    "entries"
+  ],
+  "additionalProperties": false
+}
