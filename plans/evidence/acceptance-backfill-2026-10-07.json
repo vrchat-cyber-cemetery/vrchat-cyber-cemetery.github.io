@@ -1,0 +1,37 @@
+{
+  "date": "2026-10-07",
+  "task": "GH07-05 acceptance evidence backfill for AC-01..AC-24 (GitHub side)",
+  "legend": {
+    "verified": "covered by automated tests and/or live drills recorded in plans/evidence/",
+    "live": "exercised on the real repository this date",
+    "pending-entry": "requires the first real accepted submission (issue #2 awaits a voluntary confirmer)",
+    "world-side": "requires the Unity/Udon client, out of GitHub scope"
+  },
+  "acs": {
+    "AC-01": "verified: nine types in schema/tests; live intake of issue #2 (type event) accepted; XSS rendering test",
+    "AC-02": "verified: schema limits, duplicate slots, media presence, orphan media, decode failures rejected before activation",
+    "AC-03": "live: read-only user submitted issue #2 end to end into receipt+draft PR; edit path shares the same replayed code; report form live",
+    "AC-04": "verified: only published entries reach site/packs; withdrawn page and listing tests; restore requires re-acceptance",
+    "AC-05": "verified (server half): fixed 577 addresses, revision+SHA binding, out-of-order refusal; world half pending",
+    "AC-06": "world-side",
+    "AC-07": "world-side",
+    "AC-08": "verified: out-of-order guard, stale-record hash mismatch (PB-000002 incident), revision rejection tests; network/timeout simulation is world-side",
+    "AC-09": "verified (build half): 512 packs, budgets, byte-identical rebuild drill; 4,096 x 7-image client access is world-side",
+    "AC-10": "world-side",
+    "AC-11": "verified: git bundle backup of all four repositories, clone-from-bundle restore passes npm run check; secret-free history scan; 'another GitHub project' re-host not drilled",
+    "AC-12": "live: /verify four-check gate blocks publish; self-verification and self-approval rejected on issue #2 with zero state mutation; automation tokens scoped per job",
+    "AC-13": "verified: numeric-id identity, rename-no-regrant tests; binding optional; no credentials collected",
+    "AC-14": "verified: one-time initial credit, retry/rename tests",
+    "AC-15": "verified (machinery): claim cap 2, independent confirmation, conflicted reviews never rewarded; exchange switch off per policy",
+    "AC-16": "verified: single-credit concurrency test, operation-id idempotency, publication replay drill PB-000004/PB-000005",
+    "AC-17": "verified: reward reversal records negative ledger, suspension on overdraw, no tombstone deletion",
+    "AC-18": "verified (half): fork isolation scan and bundle restore; full mirror-on-another-org drill not executed",
+    "AC-19": "pending-entry: share pages live and login-free; first real published entry needed for the full receipt link",
+    "AC-20": "verified: consent declarations plus maintainer/author gates; non-player objects covered by nine types; live intake #2 is a non-player memorial",
+    "AC-21": "verified: share page links to guides, invite credits constant 0, no self-hosted backend anywhere in the chain",
+    "AC-22": "verified: withdrawn URL becomes the generic unavailable page, no identity/body/images; external cache boundary documented",
+    "AC-23": "live: form->Issue->receipt->draft PR completed without Git knowledge on issue #2; full location receipt is pending-entry",
+    "AC-24": "world-side: short-code parsing and guidance live on the site; in-world confirmation pending"
+  },
+  "summary": { "verified_or_live": 17, "pending_first_entry": 2, "world_side": 5 }
+}

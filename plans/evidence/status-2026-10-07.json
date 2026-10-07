@@ -37,12 +37,17 @@
       "GH04-01..04 verified end to end by activated publication PB-000004 (evidence/publication-pipeline-2026-10-07.json)",
       "GH04-05 withdrawal commands exist; full withdraw-republish drill pending"
     ],
-    "policy": "pilot-v2: open voluntary confirmers via /join; independence (confirmer is not the author) unchanged; maintainer-only powers kept for visibility, compensation, suspension and the rewards switch"
+    "policy": "pilot-v2: open voluntary confirmers via /join; independence (confirmer is not the author) unchanged; maintainer-only powers kept for visibility, compensation, suspension and the rewards switch",
+    "GH-07": [
+      "GH07-01 ruleset-required CI on main with App-only bypass (human direct push rejected, PR flow and PB-000005 verified)",
+      "GH07-03 backup/restore/determinism/fork-isolation drill",
+      "GH07-04 operations playbooks"
+    ]
   },
   "partial": {
     "GH-02": "App-mode intake verified live on issue #2; acceptance now open to any voluntary confirmer (/join), awaiting the first volunteer for issue #2",
     "GH-06": "The publishing receipt updater exists, but no real published entry has been accepted and deployed; the VRChat world URL is intentionally empty.",
-    "GH-07": "force-push and deletion blocked on all four mains; required status checks deferred because they block the direct-push automation"
+    "GH-07": "GH07-02 and the real-rewards switch await a second independent maintainer; GH07-05 evidence backfilled (17 verified, 2 pending first entry, 5 world-side)"
   },
   "not_started": [
     "GH04-05 drill",
@@ -65,6 +70,8 @@
     "github_app_registered": true,
     "review_credit_exchange_enabled": false,
     "activated_publication": "PB-000004 live on both shards with matching hashes",
-    "real_submission_intake": "issue #2: receipt, draft PR #3, independence gates rejected self-verify and self-publish (evidence/submission-acceptance-2026-10-07.json)"
+    "real_submission_intake": "issue #2: receipt, draft PR #3, independence gates rejected self-verify and self-publish (evidence/submission-acceptance-2026-10-07.json)",
+    "ruleset_main_requires_ci": "active, bypass integration 5219672 only",
+    "latest_publication": "PB-000005 activated under the ruleset"
   }
 }
