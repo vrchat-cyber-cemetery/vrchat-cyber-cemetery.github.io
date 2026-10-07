@@ -1,11 +1,36 @@
 {
   "schema_version": 1,
-  "publication_sequence": 0,
-  "next_entry": 1,
+  "publication_sequence": 1,
+  "next_entry": 2,
   "next_review": 1,
   "next_allocation": 1,
-  "entries": {},
-  "members": {},
+  "entries": {
+    "CC-000001": {
+      "id": "CC-000001",
+      "slot": 0,
+      "status": "published",
+      "creator_id": 11071219,
+      "creator_login": "Ero-Cat",
+      "issue_number": 2
+    }
+  },
+  "members": {
+    "11071219": {
+      "schema_version": 1,
+      "github_id": 11071219,
+      "login": "Ero-Cat",
+      "credits": 0,
+      "initial_grant": true
+    }
+  },
   "review_tasks": {},
-  "operations": {}
+  "operations": {
+    "publish:2:61b955cfaf08c65db5b8715c0cc49bbbe4653b1caffb56d718444e233f7b8d07": "CC-000001"
+  },
+  "receipts": {
+    "2": {
+      "entry_id": "CC-000001",
+      "approved_revision": "61b955cfaf08c65db5b8715c0cc49bbbe4653b1caffb56d718444e233f7b8d07"
+    }
+  }
 }
