@@ -7,6 +7,9 @@ on:
         default: '11071219'
 permissions:
   contents: read
+concurrency:
+  group: publication-orchestration
+  cancel-in-progress: false
 jobs:
   build:
     runs-on: windows-latest
@@ -102,7 +105,7 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
       - name: Create release and dispatch shards
         run: |
-          record=$(ls data/publications/*.json | head -1)
+          record=$(ls build/publication/record/*.json)
           id=$(jq -r .publication_id "$record")
           sequence=$(jq -r .publication_sequence "$record")
           sha=$(jq -r .source_sha "$record")
