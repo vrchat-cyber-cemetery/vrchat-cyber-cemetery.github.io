@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "publication_id": "PB-000003",
+  "publication_sequence": 3,
+  "source_sha": "50a2187f3887e079408980520943680ace6f0484",
+  "protocol_version": 1,
+  "layout_version": "cemetery-v1",
+  "status": "requested",
+  "archives": [
+    {
+      "repository": "vrchat-cyber-cemetery/world-data-0",
+      "role": "shard-0",
+      "url": "https://github.com/vrchat-cyber-cemetery/vrchat-cyber-cemetery.github.io/releases/download/publication-PB-000003/world-data-0.zip",
+      "sha256": "a6eeae635c045b729754bc6f18714cdaecb0614d569a172977cd44a2e835a331",
+      "bytes": 72680
+    },
+    {
+      "repository": "vrchat-cyber-cemetery/world-data-1",
+      "role": "shard-1",
+      "url": "https://github.com/vrchat-cyber-cemetery/vrchat-cyber-cemetery.github.io/releases/download/publication-PB-000003/world-data-1.zip",
+      "sha256": "3e255179e4368f7f3b7676cb8d392e4077d3c76ebde73c3d571ee37bfb5b8ab3",
+      "bytes": 72760
+    }
+  ],
+  "requested_by": 11071219,
+  "requested_at": "2026-10-07T08:41:38.439Z",
+  "activated_at": null
+}
