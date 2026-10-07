@@ -14,13 +14,17 @@
   "refund_published_removal": false,
   "credits_cross_community": false,
   "grave_slots_reusable": false,
-  "real_rewards_enabled": false,
+  "real_rewards_enabled": true,
   "automatic_intake_enabled": true,
   "open_confirmers_enabled": true,
   "maintainers": [
     {
       "github_id": 11071219,
       "login": "Ero-Cat"
+    },
+    {
+      "github_id": 338969530,
+      "login": "cyber-cemetery-automation[bot]"
     }
   ],
   "intake_mode": "app"
