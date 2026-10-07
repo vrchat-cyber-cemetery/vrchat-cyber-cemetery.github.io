@@ -83,7 +83,7 @@ test("withdrawn page and listing contain no withdrawn body or photos", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cemetery-site-"));
   try {
     const r = accepted(); r.entry.status = "removed"; r.entry.story = "PRIVATE_TEST_MARKER";
-    buildSite(root, dir, project, r.state, [r.entry]);
+    buildSite(root, dir, project, policy, r.state, [r.entry]);
     assert(!fs.readFileSync(path.join(dir, "entries", r.entry.id, "index.html"), "utf8").includes("PRIVATE_TEST_MARKER"));
     assert.equal(JSON.parse(fs.readFileSync(path.join(dir, "memorials.json"), "utf8")).length, 0);
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
@@ -91,7 +91,7 @@ test("withdrawn page and listing contain no withdrawn body or photos", () => {
 test("website renders text-only accepted records and preserves pending world state", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cemetery-site-"));
   try {
-    const r = accepted(); buildSite(root, dir, project, r.state, [r.entry]);
+    const r = accepted(); buildSite(root, dir, project, policy, r.state, [r.entry]);
     const html = fs.readFileSync(path.join(dir, "entries", r.entry.id, "index.html"), "utf8");
     assert(html.includes("01-01")); assert(html.includes("尚未上线") || html.includes("正在建设"));
     assert.equal(JSON.parse(fs.readFileSync(path.join(dir, "catalog.json"), "utf8")).world_status, "awaiting_world");

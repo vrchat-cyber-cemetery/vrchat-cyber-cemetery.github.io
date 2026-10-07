@@ -7,10 +7,11 @@ import crypto from "node:crypto";
 const root = fileURLToPath(new URL("../", import.meta.url));
 const output = path.join(root, "build/site");
 const project = JSON.parse(fs.readFileSync(path.join(root, "config/project.json"), "utf8"));
+const policy = JSON.parse(fs.readFileSync(path.join(root, "config/policy.json"), "utf8"));
 const state = JSON.parse(fs.readFileSync(path.join(root, "data/state.json"), "utf8"));
 const entries = Object.values(state.entries).map(x => JSON.parse(fs.readFileSync(path.join(root, "entries", x.id + ".json"), "utf8")));
 fs.rmSync(output, { recursive: true, force: true });
-const result = buildSite(root, output, project, state, entries);
+const result = buildSite(root, output, project, policy, state, entries);
 await sharp(path.join(root, "site/assets/share.svg")).png().toFile(path.join(output, "assets/share.png"));
 // New HTML refers to content-addressed client assets; cached older HTML can still use the original paths.
 const substitutions = [];

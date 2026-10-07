@@ -10,9 +10,10 @@ import { buildAddressManifest, packUrl, packShard } from "../lib/runtime.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const project = JSON.parse(fs.readFileSync(path.join(root, "config/project.json"), "utf8"));
+const policy = JSON.parse(fs.readFileSync(path.join(root, "config/policy.json"), "utf8"));
 const ajv = new Ajv({ allErrors: true, strict: true });
 const load = name => ajv.compile(JSON.parse(fs.readFileSync(path.join(root, "schema", name + ".schema.json"), "utf8")));
-const schemas = Object.fromEntries(["member", "review", "ledger-event", "ledger-operation", "allocation", "publication", "catalog", "region", "pack-metadata", "entry"].map(name => [name, load(name)]));
+const schemas = Object.fromEntries(["member", "review", "ledger-event", "ledger-operation", "allocation", "publication", "catalog", "region", "pack-metadata", "entry", "address-manifest"].map(name => [name, load(name)]));
 const check = (name, value) => assert(schemas[name](value), name + " rejected a valid record: " + JSON.stringify(schemas[name].errors));
 const reject = (name, value) => assert(!schemas[name](value), name + " accepted an invalid record");
 
@@ -77,7 +78,7 @@ test("generated catalog and region exports satisfy runtime schemas", () => {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cemetery-runtime-"));
   try {
     const state = { publication_sequence: 0, entries: {} };
-    buildSite(root, dir, project, state, []);
+    buildSite(root, dir, project, policy, state, []);
     check("catalog", JSON.parse(fs.readFileSync(path.join(dir, "catalog.json"), "utf8")));
     for (const region of ["00", "31", "63"]) {
       const value = JSON.parse(fs.readFileSync(path.join(dir, "regions", region + ".json"), "utf8"));
@@ -110,6 +111,9 @@ test("pack metadata keeps unpublished positions null and pins slot order", () =>
 });
 test("address manifest exposes exactly 577 unique fixed URLs split across shards", () => {
   const manifest = buildAddressManifest(project);
+  check("address-manifest", manifest);
+  reject("address-manifest", { ...manifest, packs: manifest.packs.slice(0, 511) });
+  reject("address-manifest", { ...manifest, catalog: "https://example.com/other.json" });
   assert.equal(manifest.counts.total, 577);
   assert.equal(new Set([manifest.catalog, ...manifest.regions, ...manifest.packs]).size, 577);
   assert.equal(manifest.regions[0], project.site_base + "/regions/00.json");
@@ -118,4 +122,16 @@ test("address manifest exposes exactly 577 unique fixed URLs split across shards
   assert.equal(packShard(project, 256), 1);
   assert.equal(packUrl(project, 256), project.data_site_bases[1] + "/packs/256.bin");
   assert.throws(() => packUrl(project, 512), /capacity/);
+});
+test("published site configuration derives from approved policy and project config", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cemetery-config-"));
+  try {
+    buildSite(root, dir, project, policy, { publication_sequence: 0, entries: {} }, []);
+    const config = JSON.parse(fs.readFileSync(path.join(dir, "assets/site-config.json"), "utf8"));
+    assert.equal(config.member_credits, policy.initial_creation_credits);
+    assert.equal(config.review_exchange, policy.valid_reviews_per_credit);
+    assert.deepEqual(config.data_site_bases, project.data_site_bases);
+    assert.equal(config.protocol_version, project.protocol_version);
+    assert.equal(config.layout_version, project.layout_version);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });

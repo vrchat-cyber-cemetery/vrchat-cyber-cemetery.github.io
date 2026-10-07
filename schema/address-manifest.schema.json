@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$comment": "Data class: runtime export. Fixed address list imported by the world editor tool; exactly 577 unique preset URLs generated from config, never assembled at runtime.",
+  "type": "object",
+  "properties": {
+    "schema": {
+      "const": 1
+    },
+    "community_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100
+    },
+    "protocol_version": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "layout_version": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 40
+    },
+    "catalog": {
+      "type": "string",
+      "pattern": "^https://.+\\/catalog\\.json$"
+    },
+    "regions": {
+      "type": "array",
+      "minItems": 64,
+      "maxItems": 64,
+      "items": {
+        "type": "string",
+        "pattern": "^https://.+\\/regions\\/\\d{2}\\.json$"
+      }
+    },
+    "packs": {
+      "type": "array",
+      "minItems": 512,
+      "maxItems": 512,
+      "items": {
+        "type": "string",
+        "pattern": "^https://.+\\/packs\\/\\d{3}\\.bin$"
+      }
+    },
+    "counts": {
+      "type": "object",
+      "properties": {
+        "catalog": {
+          "const": 1
+        },
+        "regions": {
+          "const": 64
+        },
+        "packs": {
+          "const": 512
+        },
+        "total": {
+          "const": 577
+        }
+      },
+      "required": [
+        "catalog",
+        "regions",
+        "packs",
+        "total"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "schema",
+    "community_id",
+    "protocol_version",
+    "layout_version",
+    "catalog",
+    "regions",
+    "packs",
+    "counts"
+  ],
+  "additionalProperties": false
+}
