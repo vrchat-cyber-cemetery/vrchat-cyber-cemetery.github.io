@@ -1,0 +1,30 @@
+{
+  "date": "2026-10-07",
+  "task": "GH-03 build pipeline and GH-04 cross-repo publication, end to end",
+  "activated_publication": {
+    "publication_id": "PB-000004",
+    "publication_sequence": 4,
+    "source_sha": "c3c852fa1195986dace50040b16cb14dc83fff79",
+    "status": "activated",
+    "activated_at": "2026-10-07T08:49:17Z",
+    "workflow_run": 37596101414
+  },
+  "pipeline": {
+    "build": "windows-latest runner, texconv may2026 pinned by URL and SHA-256 (dcfdec10244e02cf5037fba089c55fb7e1326b1c8181742d77d15fa5cb5eef06), 512 packs, budgets checked",
+    "ship": "shard zip archives assembled, container SHA-256 filled into the record, record committed by the automation App, release publication-PB-000004, repository_dispatch to both shards",
+    "shards": "out-of-order guard (sequence must be newer), record fetched from main and cross-checked, archive hash verified before unpack, packs committed and Pages deployed by each shard",
+    "activate": "polled both live shard manifests for publication_id/source_sha and verified a live pack SHA-256 against the manifest before activating the record and redeploying the site"
+  },
+  "verification": {
+    "live_manifests": "both shards report PB-000004 / sequence 4 / source c3c852f",
+    "live_pack_hash_spot_check": "packs/511.bin live SHA-256 5af947a401100bb4484d3d45f7e7e8f31f811b4530ed1cde1c638e9ccdb4e9e7 equals manifest entry",
+    "local_tests": 63,
+    "failed_attempts_recorded": ["PB-000001 manifest missing region/group/revision", "PB-000002 dispatch selected a stale record (head -1)", "PB-000003 shard publish job lacked contents:write"],
+    "out_of_order_guard": "implemented in each shard; not triggered by PB-000004 because all earlier publications failed before deployment"
+  },
+  "known_limits": [
+    "no published entry carries images yet, so the atlas/BC1 texconv path ran pinned-and-verified but produced no textures; first image-bearing submission must be visually accepted",
+    "withdrawal (GH04-05) reuses /remove plus this pipeline; a full withdraw-and-republish drill has not been executed",
+    "required status checks on main are deferred: they block the direct pushes the automation depends on; force-push and deletion are blocked on all four repositories"
+  ]
+}

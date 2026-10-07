@@ -12,36 +12,49 @@
     ],
     "GH-02": [
       "GH02-01 Issue Forms",
-      "GH02-02 text-only and attachment-oriented submission flow",
-      "same_repository intake validation and receipt pilot"
+      "GH02-02 submission flow",
+      "GH02-03 App-mode draft PR intake with pinned create-github-app-token",
+      "GH02-04 revision plus PR-head binding with same-branch updates",
+      "GH02-05 /verify four-check gate, report and appeal entries"
     ],
     "GH-05": [
-      "GH05-01 GitHub numeric member identity and one-time initial credit",
-      "GH05-04 idempotent initial grant and creation consumption"
+      "GH05-01",
+      "GH05-02 claim/submit/confirm review machinery",
+      "GH05-03 exchange dedup machinery (switch stays off)",
+      "GH05-04",
+      "GH05-05 reversal, compensation, suspension"
     ],
     "GH-06": [
       "GH06-01 public share pages and guides",
       "GH06-03 public location code parsing and guidance",
       "GH06-04 withdrawn/unavailable page behavior"
     ],
-    "setup": "GitHub App registered, installed on main plus both shards, credentials imported (evidence/automation-app-2026-10-07.json)"
+    "setup": "GitHub App registered, installed on main plus both shards, credentials imported (evidence/automation-app-2026-10-07.json)",
+    "GH-03": [
+      "all six tasks: validation, Sharp preview, pinned texconv atlas/BC1 path, snapshot manifest, real Windows build, hard budgets"
+    ],
+    "GH-04": [
+      "GH04-01..04 verified end to end by activated publication PB-000004 (evidence/publication-pipeline-2026-10-07.json)",
+      "GH04-05 withdrawal commands exist; full withdraw-republish drill pending"
+    ]
   },
   "partial": {
     "GH-02": "same_repository intake pilot runs today; the App is registered and its token chain is verified, but App-mode draft PR automation is not implemented yet.",
-    "GH-06": "The publishing receipt updater exists, but no real published entry has been accepted and deployed; the VRChat world URL is intentionally empty."
+    "GH-06": "The publishing receipt updater exists, but no real published entry has been accepted and deployed; the VRChat world URL is intentionally empty.",
+    "GH-07": "force-push and deletion blocked on all four mains; required status checks deferred because they block the direct-push automation"
   },
   "not_started": [
-    "GH-03",
-    "GH-04",
-    "GH-05-02",
-    "GH-05-03",
-    "GH-05-05",
-    "GH-05-06",
-    "GH-06-05",
-    "GH-07"
+    "GH04-05 drill",
+    "GH05-06",
+    "GH06-02",
+    "GH06-05",
+    "GH07-02",
+    "GH07-03",
+    "GH07-04",
+    "GH07-05"
   ],
   "verification": {
-    "local_business_and_config_tests": 45,
+    "local_business_and_config_tests": 63,
     "protocol_model_checks": 30,
     "pages_deployments": "main site and both runtime shards successful",
     "runtime_address_check": "577/577 direct HTTP 200, schemas and SHA-256 verified",
@@ -49,6 +62,7 @@
     "real_vrchat_world": false,
     "real_published_entry": false,
     "github_app_registered": true,
-    "review_credit_exchange_enabled": false
+    "review_credit_exchange_enabled": false,
+    "activated_publication": "PB-000004 live on both shards with matching hashes"
   }
 }
