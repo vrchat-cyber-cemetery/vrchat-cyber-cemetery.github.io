@@ -73,7 +73,7 @@ for (let index = 0; index < project.capacity.pack_count; index++) {
   const texture = await textureFor(inPack);
   const pack = encodePack(meta, texture);
   const shard = shards[Math.floor(index / (project.capacity.pack_count / shards.length))];
-  shard.packs.push({ pack: index, bytes: pack.length, sha256: sha256(pack) });
+  shard.packs.push({ pack: index, region, group, revision: meta.revision, bytes: pack.length, sha256: sha256(pack) });
   shard.total += pack.length;
   fs.mkdirSync(path.join(output, shard.name, "packs"), { recursive: true });
   fs.writeFileSync(path.join(output, shard.name, "packs", String(index).padStart(3, "0") + ".bin"), pack);
