@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-07",
+  "task": "Real submission acceptance, issue #2 (author Ero-Cat)",
+  "submission": {
+    "issue": 2,
+    "title": "[墓碑投稿] 大黄猫的成熟稳重",
+    "buried_type": "event",
+    "revision": "61b955cfaf08c65db5b8715c0cc49bbbe4653b1caffb56d718444e233f7b8d07",
+    "images": 0
+  },
+  "verified_live": [
+    "intake receipt posted with revision binding and maintainer instructions",
+    "structured draft PR #3 on branch submission/2 containing entries/CC-000001.json, data/state.json preview (initial grant + single consume) and the ledger envelope",
+    "/verify by the submitting maintainer correctly rejected: 不能核验自己的投稿",
+    "/publish by the submitting maintainer correctly rejected: 请由独立维护者审核",
+    "after both rejections main carries zero entries, zero operations, zero members and zero consumed credits; draft PR remains the review artifact"
+  ],
+  "defects_found_and_fixed": [
+    "workflow schema rejected underscore permission key pull_requests; hyphenated pull-requests restored — this had silently unbound ALL issue events since 0f9a705 (root cause of the missing intake when issue #2 was created)",
+    "computed object keys lacked brackets in draftFilesFor — every intake run would have crashed; caught by replaying the real event locally with the App token",
+    "receipt rendered the draft PR title as undefined; title now carried through",
+    "syntax gate added to the check chain (20 modules) so parse-breaking tools can no longer merge silently"
+  ],
+  "blocked_by_design": "positive acceptance requires an independent maintainer; the sole maintainer is the submission author, exactly the pilot-v1 constraint recorded under GH05-06",
+  "replay_note": "the opened event predated the workflow fix, so intake was replayed locally against the real repository with a freshly minted installation token executing tools/issue-business.mjs unchanged; subsequent comment events ran through the normal workflow"
+}

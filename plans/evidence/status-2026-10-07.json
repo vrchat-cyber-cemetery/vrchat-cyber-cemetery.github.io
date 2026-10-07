@@ -39,7 +39,7 @@
     ]
   },
   "partial": {
-    "GH-02": "same_repository intake pilot runs today; the App is registered and its token chain is verified, but App-mode draft PR automation is not implemented yet.",
+    "GH-02": "App-mode intake verified live on issue #2; positive acceptance awaits a second independent maintainer (pilot-v1 constraint)",
     "GH-06": "The publishing receipt updater exists, but no real published entry has been accepted and deployed; the VRChat world URL is intentionally empty.",
     "GH-07": "force-push and deletion blocked on all four mains; required status checks deferred because they block the direct-push automation"
   },
@@ -63,6 +63,7 @@
     "real_published_entry": false,
     "github_app_registered": true,
     "review_credit_exchange_enabled": false,
-    "activated_publication": "PB-000004 live on both shards with matching hashes"
+    "activated_publication": "PB-000004 live on both shards with matching hashes",
+    "real_submission_intake": "issue #2: receipt, draft PR #3, independence gates rejected self-verify and self-publish (evidence/submission-acceptance-2026-10-07.json)"
   }
 }
