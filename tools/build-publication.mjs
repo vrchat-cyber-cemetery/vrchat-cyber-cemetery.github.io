@@ -79,7 +79,11 @@ for (let index = 0; index < project.capacity.pack_count; index++) {
   fs.writeFileSync(path.join(output, shard.name, "packs", String(index).padStart(3, "0") + ".bin"), pack);
 }
 
-const sequence = state.publication_sequence + 1;
+// Publication ids advance strictly past every registered record so retries never reuse a tag.
+const registered = fs.existsSync(path.join(root, "data/publications"))
+  ? fs.readdirSync(path.join(root, "data/publications")).filter(n => n.endsWith(".json")).map(n => JSON.parse(fs.readFileSync(path.join(root, "data/publications", n), "utf8")))
+  : [];
+const sequence = Math.max(state.publication_sequence, ...registered.map(r => r.publication_sequence || 0)) + 1;
 const publicationId = "PB-" + String(sequence).padStart(6, "0");
 const archives = [];
 for (const shard of shards) {
