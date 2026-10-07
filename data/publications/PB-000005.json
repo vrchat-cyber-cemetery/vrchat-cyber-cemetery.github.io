@@ -5,7 +5,7 @@
   "source_sha": "84c13046a17e3b72a63ac3cfd7692c91487d7307",
   "protocol_version": 1,
   "layout_version": "cemetery-v1",
-  "status": "requested",
+  "status": "activated",
   "archives": [
     {
       "repository": "vrchat-cyber-cemetery/world-data-0",
@@ -24,5 +24,5 @@
   ],
   "requested_by": 11071219,
   "requested_at": "2026-10-07T14:03:35.741Z",
-  "activated_at": null
+  "activated_at": "2026-10-07T14:04:44Z"
 }
