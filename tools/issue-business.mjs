@@ -2,7 +2,7 @@ import fs from "node:fs";
 import { GitHub, operationFilename } from "../lib/github.mjs";
 import { parseSubmission, revisionOf, emptyState, acceptSubmission, changeVisibility, previewSubmission } from "../lib/submissions.mjs";
 import { prepareMedia } from "../lib/media.mjs";
-import { recordVerification, claimReview, submitReview, confirmReview, exchangeCredits, compensate, reverseReward, setSuspension } from "../lib/community.mjs";
+import { recordVerification, claimReview, submitReview, confirmReview, exchangeCredits, compensate, reverseReward, setSuspension, joinConfirmer } from "../lib/community.mjs";
 import { previewReport } from "../lib/media.mjs";
 
 const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, "utf8"));
@@ -20,7 +20,7 @@ function summary(draft, verification, pull) {
     + "张\n- 投稿编号:#" + number + "\n- 内容修订:`" + shortRevision(draft.revision) + "`\n\n"
     + "[查看处理进度](https://" + repository.split("/")[0] + ".github.io/status/?issue=" + number + ")\n\n"
     + (pull ? "**结构化草稿 PR:[" + pull.title + "](" + pull.url + ")**(draft)\n\n审核绑定修订 `" + shortRevision(draft.revision) + "` 与 PR 提交 `" + pull.sha.slice(0, 10) + "`;投稿编辑后草稿自动更新,旧绑定失效。\n\n" : "")
-    + "<details><summary>维护者审核指令</summary>\n\n1. 核验(人物同意、图片授权、角色权限、利益回避):\n\n    /verify " + draft.revision + "\n\n2. 审核同意后回复(草稿存在时必须附 PR 提交 SHA):\n\n    /publish " + draft.revision + (pull ? " " + pull.sha : "") + "\n\n指令只接受配置中的维护者;不能审核自己的投稿。</details>\n";
+    + "<details><summary>维护者审核指令</summary>\n\n1. 核验(人物同意、图片授权、角色权限、利益回避):\n\n    /verify " + draft.revision + "\n\n2. 审核同意后回复(草稿存在时必须附 PR 提交 SHA):\n\n    /publish " + draft.revision + (pull ? " " + pull.sha : "") + "\n\n指令接受维护者或独立确认人;任何GitHub用户可在社区Issue回复 /join 自愿成为确认人;确认人不能处理自己的投稿。</details>\n";
 }
 
 async function draftFilesFor(state, draft, policy) {
@@ -100,6 +100,7 @@ async function loadReviews(head, state) {
 async function moderate() {
   if (event.comment?.user?.type === "Bot") return;
   const body = String(event.comment?.body || "").trim();
+  const join = /^\/join$/.exec(body);
   const publish = /^\/publish ([a-f0-9]{64})(?: ([0-9a-f]{40}))?$/.exec(body);
   const verify = /^\/verify ([a-f0-9]{64})$/.exec(body);
   const reviewClaim = /^\/review claim$/.exec(body);
@@ -110,18 +111,34 @@ async function moderate() {
   const revokeCmd = /^\/revoke-review (RV-\d{6})$/.exec(body);
   const suspendCmd = /^\/(suspend|resume) (\d+)$/.exec(body);
   const visibility = /^\/(hide|dispute|remove|restore) (CC-\d{6})$/.exec(body);
-  if (!publish && !verify && !reviewClaim && !reviewSubmit && !reviewConfirm && !exchange && !compensateCmd && !revokeCmd && !suspendCmd && !visibility) return;
+  if (!publish && !verify && !reviewClaim && !reviewSubmit && !reviewConfirm && !exchange && !compensateCmd && !revokeCmd && !suspendCmd && !visibility && !join) return;
   let processed = null;
   try {
+    if (join) {
+      const head = await github.head();
+      const policy = await github.jsonAt("config/policy.json", head.sha);
+      const state = await github.jsonAt("data/state.json", head.sha, emptyState());
+      const joined = joinConfirmer(state, { github_id: event.comment.user.id, login: event.comment.user.login }, policy);
+      await github.commit(head, { "data/state.json": json(joined.state) }, "Record voluntary confirmer " + event.comment.user.login);
+      await github.call("issues/" + number + "/comments", "POST", { body: "### 欢迎加入独立确认\n\n" + event.comment.user.login + " 已登记为独立确认人。职责:对**非本人**投稿核验人物同意、图片授权、角色权限与利益回避(`/verify`),并可在核验后执行 `/publish`;同样适用于 `/review confirm`。\n\n这是公开的责任声明:确认记录永久进入账本,可追溯、可暂停。维护者保留撤下与暂停权限。" });
+      return;
+    }
     for (let attempt = 0; attempt < 3; attempt++) {
       const head = await github.head();
       const policy = await github.jsonAt("config/policy.json", head.sha);
       if (!policy.automatic_intake_enabled || policy.implementation_status === "not_implemented") return;
       const actorId = event.comment.user.id;
       const actorIsMaintainer = policy.maintainers.some(m => m.github_id === actorId);
-      const maintainerOnly = verify || publish || reviewConfirm || compensateCmd || revokeCmd || suspendCmd || visibility;
-      if (maintainerOnly && !actorIsMaintainer) return;
       const state = await github.jsonAt("data/state.json", head.sha, emptyState());
+      const confirmerRecord = state.confirmers?.[String(actorId)];
+      const actorCanConfirm = actorIsMaintainer || (policy.open_confirmers_enabled && confirmerRecord && !confirmerRecord.suspended);
+      const needsConfirmRole = verify || publish || reviewConfirm;
+      const maintainerOnly = compensateCmd || revokeCmd || suspendCmd || visibility;
+      if (maintainerOnly && !actorIsMaintainer) return;
+      if (needsConfirmRole && !actorCanConfirm) {
+        await github.call("issues/" + number + "/comments", "POST", { body: "此指令需要维护者或独立确认人执行。任何GitHub用户都可以在任意社区Issue下回复 `/join` 自愿加入;确认人不能处理自己的投稿。" });
+        return;
+      }
       const files = {};
       let result;
       if (verify) {

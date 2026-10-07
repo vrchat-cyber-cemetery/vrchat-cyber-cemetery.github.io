@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "policy_version": "pilot-v1",
+  "policy_version": "pilot-v2",
   "decision_status": "approved",
   "implementation_status": "pilot",
   "initial_creation_credits": 1,
@@ -16,6 +16,7 @@
   "grave_slots_reusable": false,
   "real_rewards_enabled": false,
   "automatic_intake_enabled": true,
+  "open_confirmers_enabled": true,
   "maintainers": [
     {
       "github_id": 11071219,

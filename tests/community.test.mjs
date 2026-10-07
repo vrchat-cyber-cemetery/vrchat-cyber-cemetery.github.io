@@ -7,7 +7,7 @@ import sharp from "sharp";
 import Ajv from "ajv";
 import { fileURLToPath } from "node:url";
 import { emptyState, acceptSubmission, previewSubmission, revisionOf } from "../lib/submissions.mjs";
-import { recordVerification, claimReview, submitReview, confirmReview, exchangeCredits, compensate, reverseReward, setSuspension } from "../lib/community.mjs";
+import { recordVerification, claimReview, submitReview, confirmReview, exchangeCredits, compensate, reverseReward, setSuspension, joinConfirmer } from "../lib/community.mjs";
 import { GitHub } from "../lib/github.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
@@ -198,4 +198,44 @@ test("preview report runs the approved normalization and reports real dimensions
   assert.equal(report.main.background, "#e5e2d8", "transparent input is flattened onto the site background");
   assert.match(report.main.path, /^media\/[a-f0-9]{64}\.jpg$/);
   assert.equal(report.main.bytes <= 1024 * 1024, true);
+});
+
+test("voluntary confirmers: anyone joins, verifies and accepts others' submissions", () => {
+  let state = emptyState();
+  const joined = joinConfirmer(state, { github_id: 424242, login: "volunteer" }, policy);
+  assert(!joined.rejoined);
+  assert.equal(joined.state.confirmers["424242"].via, "voluntary");
+  assert.throws(() => joinConfirmer(joined.state, { github_id: 424242, login: "volunteer" }, policy), /已是/);
+  state = joined.state;
+  // the volunteer can verify someone else's submission...
+  const verified = recordVerification(state, 9, revision, 424242, 123456, policy);
+  assert(!verified.duplicate);
+  // ...and accept it (draft carries the submitter identity)
+  const draft = { issue_number: 9, revision, author: { github_id: 123456, login: "author" }, title: "t", buried_type: "project", buried_subject: "s", epitaph: "", story: "", date_note: "", tags: [], links: [], players: [], images: noMedia };
+  const accepted = acceptSubmission(verified.state, draft, 424242, policy, noMedia);
+  assert.equal(accepted.entry.id, "CC-000001");
+  // independence still holds: the volunteer cannot handle their own submission
+  assert.throws(() => recordVerification(state, 9, revision, 424242, 424242, policy), /自己/);
+  const ownDraft = { ...draft, author: { github_id: 424242, login: "volunteer" } };
+  assert.throws(() => acceptSubmission(verified.state, ownDraft, 424242, policy, noMedia), /自己/);
+  // strangers without joining stay outside
+  assert.throws(() => recordVerification(state, 9, revision, 98765, 123456, policy), /\/join/);
+  // a suspended confirmer loses the powers and can rejoin voluntarily afterwards
+  const suspended = setSuspension(verified.state, 424242, true, moderator, policy).state;
+  assert.equal(suspended.confirmers["424242"].suspended, true);
+  assert.throws(() => acceptSubmission(suspended, draft, 424242, policy, noMedia), /\/join/);
+  const rejoined = joinConfirmer(suspended, { github_id: 424242, login: "volunteer" }, policy);
+  assert(rejoined.rejoined);
+});
+
+test("confirmer joining is refused when the policy keeps the role closed", () => {
+  const closed = { ...policy, open_confirmers_enabled: false };
+  assert.throws(() => joinConfirmer(emptyState(), { github_id: 424242, login: "v" }, closed), /未开放/);
+});
+
+test("confirmers may independently confirm reviews", () => {
+  const state = joinConfirmer(emptyState(), { github_id: 424242, login: "volunteer" }, policy).state;
+  const review = submitReview(claimReview(emptyState(), 9, revision, member(11), 123456, policy).state, 9, revision, 11, "support", "同意").review;
+  const confirmed = confirmReview(review, 424242, 123456, policy, state);
+  assert.equal(confirmed.review.independent_confirmation.confirmed_by, 424242);
 });
