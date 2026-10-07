@@ -167,3 +167,49 @@ test("region summaries advertise the exact revision of each pack", () => {
     assert.equal(catalog.regions[10].revision, "empty-v1");
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
+
+test("publication primitives: atlas layout, DDS parsing, pack encoding and budgets", async () => {
+  const { atlasCells, bc1BlocksFromDDS, encodePack, checkBudgets, publicationRecord, TEXCONV, CCPACK } = await import("../lib/publication.mjs");
+  for (let strip = 0; strip < 8; strip++) {
+    const cells = atlasCells(strip);
+    assert.equal(cells.length, 7);
+    for (const cell of cells) {
+      assert(cell.x >= 0 && cell.y >= 0 && cell.x + cell.size <= 2048 && cell.y + cell.size <= 2048);
+      for (const other of cells) if (other !== cell)
+        assert(cell.x + cell.size <= other.x || other.x + other.size <= cell.x || cell.y + cell.size <= other.y || other.y + other.size <= cell.y, "cells must not overlap");
+    }
+  }
+  const synthetic = Buffer.alloc(128 + CCPACK.textureBytes);
+  synthetic.write("DDS ", 0, "ascii");
+  synthetic.writeUInt32LE(2048, 12); synthetic.writeUInt32LE(2048, 16);
+  synthetic.writeUInt32LE(1, 28);
+  synthetic.write("DXT1", 84, "ascii");
+  const blocks = bc1BlocksFromDDS(synthetic);
+  assert.equal(blocks.length, CCPACK.textureBytes);
+  const damaged = Buffer.from(synthetic); damaged.writeUInt32LE(1024, 16);
+  assert.throws(() => bc1BlocksFromDDS(damaged), /2048/);
+  const wrongMips = Buffer.from(synthetic); wrongMips.writeUInt32LE(2, 28);
+  assert.throws(() => bc1BlocksFromDDS(wrongMips), /mip/);
+  const wrongFourCC = Buffer.from(synthetic); wrongFourCC.write("BC3", 84, "ascii");
+  assert.throws(() => bc1BlocksFromDDS(wrongFourCC), /DXT1/);
+  assert.throws(() => bc1BlocksFromDDS(synthetic.subarray(0, -1)), /长度不符/);
+
+  const meta = { schema: 1, community_id: project.community_id, layout_version: project.layout_version, region: 0, group: 0, revision: "empty-v1", entries: Array.from({ length: 8 }, () => null) };
+  const pack = encodePack(meta, blocks);
+  assert.equal(pack.length, CCPACK.header + Buffer.byteLength(JSON.stringify(meta)) + CCPACK.textureBytes);
+  assert.equal(pack.subarray(0, 8).toString("ascii"), "CCPACK01");
+  assert.equal(pack.readUInt32LE(12), CCPACK.textureBytes);
+  assert.equal(pack[20], 1);
+  assert.throws(() => encodePack(meta, Buffer.alloc(8)), /2MiB/);
+  const oversized = { ...meta, revision: "huge", entries: Array.from({ length: 8 }, () => ({ id: "CC-000001", slot: 0, revision: "a".repeat(64), title: "x".repeat(240), buried_type: "other", buried_subject: "y".repeat(240), epitaph: "z".repeat(500), story: "s".repeat(4000), date_note: "d".repeat(12000), images: { main: false, memorial: [false, false, false], avatars: [false, false, false] } })) };
+  assert.throws(() => encodePack(oversized, blocks), /协议范围/);
+
+  assert.throws(() => checkBudgets(project, { "world-data-0": 2228256 * 256 + 1 }, 0), /上限/);
+  checkBudgets(project, { "world-data-0": 2228256 * 256, "world-data-1": 0 }, 734003200);
+
+  const record = publicationRecord({ publication_id: "PB-000001", sequence: 1, source_sha: "0".repeat(40), project, archives: [{ repository: "o/r", role: "shard-0", url: "https://example.com/a.zip", sha256: "b".repeat(64), bytes: 10 }], requested_by: 1, requested_at: "2026-10-07T00:00:00.000Z" });
+  check("publication", record);
+  assert.throws(() => publicationRecord({ publication_id: "PB-000001", sequence: 0, source_sha: "0".repeat(40), project, archives: [], requested_by: 1, requested_at: "x" }), /单调/);
+  assert.equal(TEXCONV.version, "may2026");
+  assert.match(TEXCONV.sha256, /^[0-9a-f]{64}$/);
+});

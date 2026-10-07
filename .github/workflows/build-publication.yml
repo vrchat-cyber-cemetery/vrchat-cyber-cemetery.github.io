@@ -1,0 +1,170 @@
+name: Build publication
+on:
+  workflow_dispatch:
+    inputs:
+      requested_by:
+        description: 'Requesting GitHub numeric user id'
+        default: '11071219'
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run check
+      - name: Download pinned texconv
+        shell: bash
+        run: |
+          curl -sL "${TEXCONV_URL}" -o texconv.exe
+          echo "${TEXCONV_SHA256}  texconv.exe" | sha256sum -c -
+        env:
+          TEXCONV_URL: ${{ vars.TEXCONV_URL || 'https://github.com/microsoft/DirectXTex/releases/download/may2026/texconv.exe' }}
+          TEXCONV_SHA256: ${{ vars.TEXCONV_SHA256 || 'dcfdec10244e02cf5037fba089c55fb7e1326b1c8181742d77d15fa5cb5eef06' }}
+      - name: Build site and measure the approved budget
+        run: npm run build:site
+      - name: Record measured site size
+        shell: bash
+        run: |
+          SIZE=$(du -sb build/site | cut -f1)
+          echo "SITE_BYTES=$SIZE" >> "$GITHUB_ENV"
+      - name: Build the publication snapshot
+        run: node tools/build-publication.mjs
+        env:
+          TEXCONV_PATH: ${{ github.workspace }}/texconv.exe
+          PUBLICATION_SOURCE_SHA: ${{ github.sha }}
+          PUBLICATION_REQUESTED_BY: ${{ github.event.inputs.requested_by }}
+          PUBLICATION_SITE_BYTES: ${{ env.SITE_BYTES }}
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: publication-snapshot
+          path: build/publication
+          retention-days: 7
+  ship:
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: main
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: publication-snapshot
+          path: build/publication
+      - name: Assemble shard archives
+        run: |
+          cd build/publication
+          for shard in world-data-0 world-data-1; do
+            (cd "$shard" && zip -X -q -r "../$shard.zip" packs manifest.json)
+          done
+      - name: Fill real archive hashes into the record
+        run: |
+          template=$(ls build/publication/record/*.template.json)
+          node tools/finalize-record.mjs "$template" build/publication
+          rm "$template"
+      - id: app-token
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349
+        with:
+          app-id: ${{ vars.AUTOMATION_APP_CLIENT_ID }}
+          private-key: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}
+          repositories: vrchat-cyber-cemetery.github.io,world-data-0,world-data-1
+      - name: Commit publication record
+        run: |
+          record=$(ls build/publication/record/*.json)
+          id=$(basename "$record" .json)
+          mkdir -p data/publications
+          cp "$record" "data/publications/$id.json"
+          git config user.name "cyber-cemetery-automation[bot]"
+          git config user.email "168744732+cyber-cemetery-automation[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git add data/publications
+          git commit -m "Register publication $id" || echo "nothing to commit"
+          git push origin HEAD:main
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+      - name: Create release and dispatch shards
+        run: |
+          record=$(ls data/publications/*.json | head -1)
+          id=$(jq -r .publication_id "$record")
+          sequence=$(jq -r .publication_sequence "$record")
+          sha=$(jq -r .source_sha "$record")
+          gh release create "publication-$id" build/publication/world-data-0.zip build/publication/world-data-1.zip \
+            --title "Runtime publication $id" --notes "Source $sha" --latest
+          for shard in world-data-0 world-data-1; do
+            hash=$(jq -r --arg repo "vrchat-cyber-cemetery/$shard" '.archives[] | select(.repository==$repo) | .sha256' "$record")
+            gh api -X POST "repos/vrchat-cyber-cemetery/$shard/dispatches" -f event_type=publish-shard \
+              -F 'client_payload[publication_id]'="$id" -F 'client_payload[sequence]'="$sequence" \
+              -F 'client_payload[source_sha]'="$sha" -F 'client_payload[release_tag]'="publication-$id" \
+              -F "client_payload[archive_sha256]=$hash"
+          done
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
+  activate:
+    needs: ship
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
+        with:
+          ref: main
+          persist-credentials: false
+      - id: app-token
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349
+        with:
+          app-id: ${{ vars.AUTOMATION_APP_CLIENT_ID }}
+          private-key: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}
+          repositories: vrchat-cyber-cemetery.github.io
+      - name: Wait until both shards report the same publication and hashes match
+        run: |
+          record=$(ls data/publications/*.json | sort | tail -1)
+          id=$(jq -r .publication_id "$record")
+          sha=$(jq -r .source_sha "$record")
+          for attempt in $(seq 1 40); do
+            ok=1
+            for shard in world-data-0 world-data-1; do
+              manifest=$(curl -fsSL "https://vrchat-cyber-cemetery.github.io/$shard/manifest.json" || true)
+              [ "$(jq -r '.publication.publication_id // ""' <<< "$manifest")" = "$id" ] || { ok=0; break; }
+              [ "$(jq -r '.publication.source_sha // ""' <<< "$manifest")" = "$sha" ] || { ok=0; break; }
+              pack=$(jq -r '.packs[0].sha256' <<< "$manifest")
+              live=$(curl -fsSL "https://vrchat-cyber-cemetery.github.io/$shard/packs/$(printf '%03d' "$(jq -r '.packs[0].pack' <<< "$manifest")").bin" | sha256sum | cut -d' ' -f1)
+              [ "$live" = "$pack" ] || { ok=0; break; }
+            done
+            [ "$ok" = 1 ] && break
+            echo "shards not ready (attempt $attempt)"; sleep 30
+          done
+          [ "$ok" = 1 ] || { echo "shards did not reach the expected publication"; exit 1; }
+          echo "Both shards report $id from $sha with matching pack hashes."
+      - name: Activate the publication record and redeploy the site
+        run: |
+          record=$(ls data/publications/*.json | sort | tail -1)
+          id=$(jq -r .publication_id "$record")
+          jq '.status = "activated" | .activated_at = (now | todateiso8601)' "$record" > "$record.new" && mv "$record.new" "$record"
+          git config user.name "cyber-cemetery-automation[bot]"
+          git config user.email "168744732+cyber-cemetery-automation[bot]@users.noreply.github.com"
+          git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git add data/publications
+          git commit -m "Activate publication $id" || echo "nothing to commit"
+          git push origin HEAD:main
+          gh api -X POST repos/vrchat-cyber-cemetery/vrchat-cyber-cemetery.github.io/actions/workflows/pages.yml/dispatches -f ref=main
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}

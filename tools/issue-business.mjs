@@ -3,6 +3,7 @@ import { GitHub, operationFilename } from "../lib/github.mjs";
 import { parseSubmission, revisionOf, emptyState, acceptSubmission, changeVisibility, previewSubmission } from "../lib/submissions.mjs";
 import { prepareMedia } from "../lib/media.mjs";
 import { recordVerification, claimReview, submitReview, confirmReview, exchangeCredits, compensate, reverseReward, setSuspension } from "../lib/community.mjs";
+import { previewReport } from "../lib/media.mjs";
 
 const event = JSON.parse(fs.readFileSync(process.env.GITHUB_EVENT_PATH, "utf8"));
 const repository = process.env.GITHUB_REPOSITORY;
@@ -25,11 +26,22 @@ function summary(draft, verification, pull) {
 async function draftFilesFor(state, draft, policy) {
   // Preview the exact acceptance on the current head; nothing lands on main.
   const preview = previewSubmission(state, draft, policy, { main: null, memorial: [], avatars: [] });
-  return {
+  const files = {
     "entries/" + preview.entry.id + ".json": json(preview.entry),
     "data/state.json": json(preview.state),
     "ledger/" + operationFilename(preview.operation) + ".json": json({ operation_id: preview.operation, policy_version: policy.policy_version, issue_number: number, approved_by: null, events: preview.events })
   };
+  // Real normalization preview for attached images: same scaling, background and ratio as the approved output.
+  const imageList = [draft.images.main, ...draft.images.memorial, ...draft.images.avatars].filter(Boolean);
+  if (imageList.length) {
+    try {
+      const report = await previewReport(draft.images);
+      files["previews/" + number + ".json"] = json({ issue_number: number, revision: draft.revision, images: report });
+    } catch (error) {
+      files["previews/" + number + ".json"] = json({ issue_number: number, revision: draft.revision, error: String(error.message || error) });
+    }
+  }
+  return files;
 }
 
 async function upsertDraft(state, draft, policy) {

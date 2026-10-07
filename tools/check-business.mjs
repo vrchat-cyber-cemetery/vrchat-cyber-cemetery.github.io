@@ -14,6 +14,7 @@ const review = ajv.compile(schema("review"));
 const allocation = ajv.compile(schema("allocation"));
 const state = JSON.parse(fs.readFileSync(path.join(root, "data/state.json"), "utf8"));
 const slots = new Set();
+const referencedMedia = new Set();
 for (const record of Object.values(state.entries)) {
   if (!/^CC-\d{6}$/.test(record.id)) throw new Error("Invalid entry identity");
   const value = JSON.parse(fs.readFileSync(path.join(root, "entries", record.id + ".json"), "utf8"));
@@ -22,8 +23,10 @@ for (const record of Object.values(state.entries)) {
   if (value.locator !== locatorOf(value.slot) || slots.has(value.slot)) throw new Error("Duplicate or invalid stable location");
   slots.add(value.slot);
   if (value.images.avatars.length > value.players.length) throw new Error("Avatar count exceeds linked players");
-  for (const file of [value.images.main, ...value.images.memorial, ...value.images.avatars].filter(Boolean))
+  for (const file of [value.images.main, ...value.images.memorial, ...value.images.avatars].filter(Boolean)) {
+    referencedMedia.add(file);
     if (!fs.existsSync(path.join(root, file))) throw new Error("Missing approved image " + file);
+  }
 }
 if (slots.size > 4096) throw new Error("Capacity exceeded");
 for (const record of Object.values(state.members)) {
@@ -53,4 +56,7 @@ for (const name of fs.readdirSync(path.join(root, "allocations")).filter(name =>
   if (record.reason === "review-exchange") for (const id of record.evidence || []) exchangedEvidence.add(id);
 }
 for (const id of rewardedReviews) if (!exchangedEvidence.has(id)) throw new Error("Rewarded review lacks an exchange allocation: " + id);
-console.log("PASS business source registry: " + slots.size + " entries, " + Object.keys(state.members).length + " members, " + operations.length + " ledger operations");
+// Every stored medium must back at least one published entry; unpublished references are refused above.
+const stored = fs.readdirSync(path.join(root, "media")).filter(name => name.endsWith(".jpg"));
+for (const name of stored) if (!referencedMedia.has("media/" + name)) throw new Error("Orphan medium not referenced by any published entry: " + name);
+console.log("PASS business source registry: " + slots.size + " entries, " + Object.keys(state.members).length + " members, " + operations.length + " ledger operations, " + stored.length + " media files");

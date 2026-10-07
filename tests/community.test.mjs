@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
+import sharp from "sharp";
 import Ajv from "ajv";
 import { fileURLToPath } from "node:url";
 import { emptyState, acceptSubmission, previewSubmission, revisionOf } from "../lib/submissions.mjs";
@@ -185,4 +186,16 @@ test("draft pull requests are created once, updated in place and closed on accep
   const closed = await github.closePullRequest(31, "done");
   assert.equal(closed.state, "closed");
   assert(calls.some(x => x.startsWith("POST") && x.includes("issues/31/comments")));
+});
+
+test("preview report runs the approved normalization and reports real dimensions", async () => {
+  const { previewReport } = await import("../lib/media.mjs");
+  const png = await sharp({ create: { width: 1600, height: 800, channels: 4, background: { r: 0, g: 0, b: 0, alpha: 0 } } }).png().toBuffer();
+  const request = async () => new Response(png, { status: 200, headers: { "content-length": String(png.length) } });
+  const report = await previewReport({ main: "https://github.com/user-attachments/assets/x", memorial: [], avatars: [] }, request);
+  assert.equal(report.main.width, 1024);
+  assert.equal(report.main.height, 512, "ratio preserved by inside fit");
+  assert.equal(report.main.background, "#e5e2d8", "transparent input is flattened onto the site background");
+  assert.match(report.main.path, /^media\/[a-f0-9]{64}\.jpg$/);
+  assert.equal(report.main.bytes <= 1024 * 1024, true);
 });
