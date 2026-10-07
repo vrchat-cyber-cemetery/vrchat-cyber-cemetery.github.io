@@ -12,9 +12,10 @@
     "check:config": "node tools/check-config.mjs",
     "test": "node --test tests/*.test.mjs",
     "test:model": "node plans/validation/atomic-pack-model.mjs",
-    "check": "npm run check:docs && npm run check:config && npm run check:business && npm run build:manifest && npm test && npm run test:model",
+    "check": "npm run check:docs && npm run check:config && npm run check:business && npm run build:manifest && npm run build:packs && npm test && npm run test:model",
     "check:business": "node tools/check-business.mjs",
     "build:manifest": "node tools/build-world-manifest.mjs",
+    "build:packs": "node tools/build-packs.mjs",
     "build:site": "node tools/build-site.mjs",
     "preview": "node tools/serve-site.mjs"
   },

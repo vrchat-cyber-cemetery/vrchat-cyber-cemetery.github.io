@@ -6,7 +6,7 @@ import path from "node:path";
 import Ajv from "ajv";
 import { fileURLToPath } from "node:url";
 import { buildSite } from "../lib/site.mjs";
-import { buildAddressManifest, packUrl, packShard } from "../lib/runtime.mjs";
+import { buildAddressManifest, packUrl, packShard, packMetadata, regionRevision } from "../lib/runtime.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const project = JSON.parse(fs.readFileSync(path.join(root, "config/project.json"), "utf8"));
@@ -133,5 +133,37 @@ test("published site configuration derives from approved policy and project conf
     assert.deepEqual(config.data_site_bases, project.data_site_bases);
     assert.equal(config.protocol_version, project.protocol_version);
     assert.equal(config.layout_version, project.layout_version);
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
+});
+test("region summaries advertise the exact revision of each pack", () => {
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "cemetery-regions-"));
+  try {
+    const published = [{
+      id: "CC-000001", status: "published", title: "标题", buried_type: "memory", buried_subject: "对象",
+      epitaph: "", story: "", date_note: "", tags: [], links: [], players: [],
+      images: { main: null, memorial: [], avatars: [] },
+      slot: 737, locator: "12-34", approved_revision: "d".repeat(64),
+      updated_at: "2026-10-07T00:00:00.000Z", publication_sequence: 1
+    }];
+    buildSite(root, dir, project, policy, { publication_sequence: 1, entries: { "CC-000001": { id: "CC-000001", slot: 737, status: "published" } } }, published);
+    // slot 737 renders as human region 12 but lives in internal region index 11
+    const summary = JSON.parse(fs.readFileSync(path.join(dir, "regions", "11.json"), "utf8"));
+    assert.equal(summary.region, 11);
+    assert.equal(summary.entries.length, 1);
+    assert.equal(summary.entries[0].slot, 33);
+    summary.groups.forEach((group, index) => {
+      const meta = packMetadata(project, published, 11, index);
+      assert.equal(group.revision, meta.revision);
+      assert.equal(group.pack, 11 * 8 + index);
+      assert.equal(group.url, packUrl(project, 11 * 8 + index));
+      if (index === 4) assert.equal(meta.entries[1].id, "CC-000001");
+      else assert.equal(meta.revision, "empty-v1");
+    });
+    assert.notEqual(summary.revision, "empty-v1");
+    assert.equal(summary.revision, regionRevision(published, summary.groups.map(g => g.revision)));
+    const catalog = JSON.parse(fs.readFileSync(path.join(dir, "catalog.json"), "utf8"));
+    assert.equal(catalog.regions[11].published_count, 1);
+    assert.equal(catalog.regions[11].revision, summary.revision);
+    assert.equal(catalog.regions[10].revision, "empty-v1");
   } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });
