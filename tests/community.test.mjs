@@ -6,12 +6,13 @@ import path from "node:path";
 import sharp from "sharp";
 import Ajv from "ajv";
 import { fileURLToPath } from "node:url";
-import { emptyState, acceptSubmission, previewSubmission, revisionOf } from "../lib/submissions.mjs";
-import { recordVerification, claimReview, submitReview, confirmReview, exchangeCredits, compensate, reverseReward, setSuspension, joinConfirmer } from "../lib/community.mjs";
+import { emptyState, acceptSubmission, previewSubmission, revisionOf, changeVisibility } from "../lib/submissions.mjs";
+import { recordVerification, claimReview, submitReview, confirmReview, exchangeCredits, compensate, reverseReward, setSuspension, joinConfirmer, countableReviews } from "../lib/community.mjs";
 import { GitHub } from "../lib/github.mjs";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
 const policy = JSON.parse(fs.readFileSync(path.join(root, "config/policy.json"), "utf8"));
+const project = JSON.parse(fs.readFileSync(path.join(root, "config/project.json"), "utf8"));
 const moderator = policy.maintainers[0].github_id;
 const noMedia = { main: null, memorial: [], avatars: [] };
 const member = id => ({ github_id: id, login: "member-" + id });
@@ -99,10 +100,11 @@ test("three independently confirmed reviews exchange for one credit exactly once
   assert.equal(first.state.members["777"].credits, 1);
 });
 test("exchange stays closed while real rewards are disabled by policy", () => {
+  const closed = { ...policy, real_rewards_enabled: false };
   const base = accepted().state;
   base.members["777"] = { schema_version: 1, github_id: 777, login: "reviewer", credits: 0, initial_grant: true };
   const { state, reviews } = threeConfirmedReviews(base, 777);
-  assert.throws(() => exchangeCredits(state, reviews, 777, policy), /尚未开放/);
+  assert.throws(() => exchangeCredits(state, reviews, 777, closed), /尚未开放/);
 });
 test("two confirmed reviews are not enough and conflicted reviews never count", () => {
   const rewards = { ...policy, real_rewards_enabled: true };
@@ -238,4 +240,72 @@ test("confirmers may independently confirm reviews", () => {
   const review = submitReview(claimReview(emptyState(), 9, revision, member(11), 123456, policy).state, 9, revision, 11, "support", "同意").review;
   const confirmed = confirmReview(review, 424242, 123456, policy, state);
   assert.equal(confirmed.review.independent_confirmation.confirmed_by, 424242);
+});
+
+test("GH04-05 synthetic withdraw drill: source first, then site and packs drop everything", async () => {
+  const { buildSite } = await import("../lib/site.mjs");
+  const { packMetadata, regionRevision } = await import("../lib/runtime.mjs");
+  const { buildAddressManifest } = await import("../lib/runtime.mjs");
+  // accepted publication
+  const verified = recordVerification(emptyState(), 9, revision, moderator, 123456, policy).state;
+  const draft = { issue_number: 9, revision, author: { github_id: 123456, login: "author" }, title: "撤下演练", buried_type: "memory", buried_subject: "对象", epitaph: "", story: "PRIVATE_WITHDRAW_MARKER", date_note: "", tags: [], links: [], players: [], images: { main: null, memorial: [], avatars: [] } };
+  const acceptedResult = acceptSubmission(verified, draft, moderator, policy, noMedia);
+  // main-site snapshot before withdrawal carries the body
+  const beforeDir = fs.mkdtempSync(path.join(os.tmpdir(), "cw-before-"));
+  buildSite(root, beforeDir, project, policy, acceptedResult.state, [acceptedResult.entry]);
+  assert(fs.readFileSync(path.join(beforeDir, "entries", acceptedResult.entry.id, "index.html"), "utf8").includes("PRIVATE_WITHDRAW_MARKER"));
+  // withdraw on source: visibility change first (the safe order)
+  const withdrawnState = changeVisibility(acceptedResult.state, acceptedResult.entry, "removed", moderator, policy, "remove:drill").state;
+  const withdrawnEntry = { ...acceptedResult.entry, status: "removed" };
+  const afterDir = fs.mkdtempSync(path.join(os.tmpdir(), "cw-after-"));
+  buildSite(root, afterDir, project, policy, withdrawnState, [withdrawnEntry]);
+  const afterHtml = fs.readFileSync(path.join(afterDir, "entries", acceptedResult.entry.id, "index.html"), "utf8");
+  assert(!afterHtml.includes("PRIVATE_WITHDRAW_MARKER"), "withdrawn body must leave the page");
+  assert(afterHtml.includes("不公开"), "generic unavailable page is shown");
+  assert.equal(JSON.parse(fs.readFileSync(path.join(afterDir, "memorials.json"), "utf8")).length, 0);
+  // rebuilt runtime packs drop the slot and change revisions
+  const before = packMetadata(project, [acceptedResult.entry], 0, 0);
+  const after = packMetadata(project, [], 0, 0);
+  assert.notEqual(before.revision, after.revision, "pack revision must move so clients refuse stale copies");
+  assert.equal(after.entries.filter(Boolean).length, 0);
+  const catalogBefore = regionRevision([acceptedResult.entry], [before.revision]);
+  const catalogAfter = regionRevision([], [after.revision]);
+  assert.notEqual(catalogBefore, catalogAfter);
+  assert.equal(withdrawnState.entries[acceptedResult.entry.id].slot, acceptedResult.entry.slot, "slot stays reserved, never reused");
+  assert.equal(withdrawnState.members["123456"].credits, 0, "withdrawal does not refund");
+  fs.rmSync(beforeDir, { recursive: true, force: true });
+  fs.rmSync(afterDir, { recursive: true, force: true });
+  buildAddressManifest(project);
+});
+
+test("GH06-02 publication receipt updater posts entry receipts idempotently", async () => {
+  const { publishReceipts } = await import("../tools/publish-receipts.mjs");
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "receipt-"));
+  try {
+    fs.mkdirSync(path.join(dir, "entries"), { recursive: true });
+    fs.writeFileSync(path.join(dir, "entries/CC-000001.json"), JSON.stringify({ id: "CC-000001", status: "published", locator: "01-01", publication_sequence: 1 }));
+    fs.writeFileSync(path.join(dir, "entries/CC-000002.json"), JSON.stringify({ id: "CC-000002", status: "removed", locator: "01-02", publication_sequence: 2 }));
+    const state = { receipts: { "9": { entry_id: "CC-000001", approved_revision: revision }, "10": { entry_id: "CC-000002", approved_revision: revision } } };
+    const calls = [];
+    const bodies = [];
+    const api = {
+      call: async (route, method = "GET") => {
+        calls.push(method + " " + route);
+        if (route === "issues/9") return { number: 9, body: "approved body" };
+        if (route === "issues/10") return { number: 10, body: "x" };
+        return {};
+      },
+      receipt: async (n, body) => { bodies.push([n, body]); },
+      labels: async (n, label) => { calls.push("labels " + n + " " + label); }
+    };
+    const project = JSON.parse(fs.readFileSync(path.join(root, "config/project.json"), "utf8"));
+    const posted = await publishReceipts({ root: dir, api, state, project });
+    assert.deepEqual(posted.map(x => x.kind), ["published-edited-after", "withdrawn"]);
+    const published = bodies.find(([n]) => n === "9")[1];
+    assert(published.includes("CC-000001") && published.includes("01-01") && published.includes("分享页"));
+    assert(published.includes("VRChat世界尚未上线"), "no fake world readiness");
+    const withdrawn = bodies.find(([n]) => n === "10")[1];
+    assert(withdrawn.includes("不公开") && !withdrawn.includes("01-02"));
+    assert(calls.some(x => x === "GET issues/9") && calls.some(x => x.startsWith("labels 9 submission:review")));
+  } finally { fs.rmSync(dir, { recursive: true, force: true }); }
 });

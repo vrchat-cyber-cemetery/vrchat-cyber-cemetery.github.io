@@ -1,0 +1,23 @@
+{
+  "date": "2026-10-07",
+  "task": "Complete remaining GitHub-side tasks under the owner's two-maintainer assumption, synthetic verification",
+  "second_maintainer": {
+    "identity": "cyber-cemetery-automation[bot] (github_id 338969530, type Bot)",
+    "rationale": "real, repo-controlled identity; workflow moderation ignores comments where user.type == Bot, so the placeholder can never execute maintainer commands",
+    "replaced_when": "swap the numeric id in config/policy.json when a real human joins; no other change required"
+  },
+  "real_rewards": {
+    "enabled": true,
+    "anti_sybil": "exchange counts only reviews whose independent_confirmation.confirmed_by is a policy maintainer; voluntary /join confirmers add visibility but mint nothing",
+    "single_human_effect": "the sole human maintainer can confirm volunteer reviews; the human's own reviews cannot be confirmed by the bot, so self-reward stays impossible"
+  },
+  "synthetic_drills": {
+    "GH04-05": "withdraw changes source first, site drops body and shows the generic page, packs empty the slot with a moved revision, slot reserved, no refund",
+    "GH06-02": "publish-receipts posts published receipts (id, locator, version, share link, no fake world readiness) and withdrawn receipts without locator info"
+  },
+  "tests": 69,
+  "out_of_scope": [
+    "live first-entry acceptance (issue #2 still awaits a volunteer confirmer)",
+    "world entry and PCVR arrival tracked in the Unity plan"
+  ]
+}

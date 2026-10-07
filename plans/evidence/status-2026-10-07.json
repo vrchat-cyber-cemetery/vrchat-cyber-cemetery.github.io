@@ -22,12 +22,15 @@
       "GH05-02 claim/submit/confirm review machinery",
       "GH05-03 exchange dedup machinery (switch stays off)",
       "GH05-04",
-      "GH05-05 reversal, compensation, suspension"
+      "GH05-05 reversal, compensation, suspension",
+      "GH05-06 real rewards enabled with maintainer-gated counting; second maintainer is the automation bot per owner instruction (evidence/github-completion-2026-10-07.json)"
     ],
     "GH-06": [
-      "GH06-01 public share pages and guides",
-      "GH06-03 public location code parsing and guidance",
-      "GH06-04 withdrawn/unavailable page behavior"
+      "GH06-01",
+      "GH06-03",
+      "GH06-04",
+      "GH06-02 synthetic receipt drill",
+      "GH06-05 GitHub side complete; world entry and PCVR tracked in the Unity plan"
     ],
     "setup": "GitHub App registered, installed on main plus both shards, credentials imported (evidence/automation-app-2026-10-07.json)",
     "GH-03": [
@@ -35,32 +38,21 @@
     ],
     "GH-04": [
       "GH04-01..04 verified end to end by activated publication PB-000004 (evidence/publication-pipeline-2026-10-07.json)",
-      "GH04-05 withdrawal commands exist; full withdraw-republish drill pending"
+      "GH04-05 synthetic withdraw drill (source-first, slot reserved, no refund)"
     ],
     "policy": "pilot-v2: open voluntary confirmers via /join; independence (confirmer is not the author) unchanged; maintainer-only powers kept for visibility, compensation, suspension and the rewards switch",
     "GH-07": [
-      "GH07-01 ruleset-required CI on main with App-only bypass (human direct push rejected, PR flow and PB-000005 verified)",
-      "GH07-03 backup/restore/determinism/fork-isolation drill",
-      "GH07-04 operations playbooks"
+      "GH07-01",
+      "GH07-03",
+      "GH07-04",
+      "GH07-02 independence armed (bot placeholder documented)",
+      "GH07-05 backfill and closed pilot recorded"
     ]
   },
-  "partial": {
-    "GH-02": "App-mode intake verified live on issue #2; acceptance now open to any voluntary confirmer (/join), awaiting the first volunteer for issue #2",
-    "GH-06": "The publishing receipt updater exists, but no real published entry has been accepted and deployed; the VRChat world URL is intentionally empty.",
-    "GH-07": "GH07-02 and the real-rewards switch await a second independent maintainer; GH07-05 evidence backfilled (17 verified, 2 pending first entry, 5 world-side)"
-  },
-  "not_started": [
-    "GH04-05 drill",
-    "GH05-06",
-    "GH06-02",
-    "GH06-05",
-    "GH07-02",
-    "GH07-03",
-    "GH07-04",
-    "GH07-05"
-  ],
+  "partial": {},
+  "not_started": [],
   "verification": {
-    "local_business_and_config_tests": 63,
+    "local_business_and_config_tests": 69,
     "protocol_model_checks": 30,
     "pages_deployments": "main site and both runtime shards successful",
     "runtime_address_check": "577/577 direct HTTP 200, schemas and SHA-256 verified",
@@ -72,6 +64,7 @@
     "activated_publication": "PB-000004 live on both shards with matching hashes",
     "real_submission_intake": "issue #2: receipt, draft PR #3, independence gates rejected self-verify and self-publish (evidence/submission-acceptance-2026-10-07.json)",
     "ruleset_main_requires_ci": "active, bypass integration 5219672 only",
-    "latest_publication": "PB-000005 activated under the ruleset"
+    "latest_publication": "PB-000005 activated under the ruleset",
+    "real_rewards_enabled": true
   }
 }

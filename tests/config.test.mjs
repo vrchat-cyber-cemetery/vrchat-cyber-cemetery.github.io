@@ -28,9 +28,12 @@ test("duplicate maintainer IDs do not satisfy independence", () => {
   const config = fresh(); config.policy.maintainers.push({ ...config.policy.maintainers[0] });
   assert(validateConfigurations(config).some(error => error.includes("unique")));
 });
-test("real rewards remain disabled until independent confirmation is possible", () => {
-  const config = fresh(); config.policy.real_rewards_enabled = true;
+test("real rewards require two independent maintainers", () => {
+  const config = fresh(); config.policy.maintainers = [config.policy.maintainers[0]];
   assert(validateConfigurations(config).some(error => error.includes("independent")));
+});
+test("the live two-maintainer configuration validates with rewards enabled", () => {
+  assert.deepEqual(validateConfigurations(fresh()), []);
 });
 test("app-mode intake stays blocked while the App is unregistered", () => {
   const config = fresh(); config.policy.automatic_intake_enabled = true; config.policy.intake_mode = "app"; config["automation-app"].status = "not_registered";
