@@ -1,6 +1,6 @@
 # GitHub侧详细开发计划
 
-日期：2026-10-03。组织：[vrchat-cyber-cemetery](https://github.com/vrchat-cyber-cemetery)。GH-00完成，当前上线同仓库投稿／网页试点，范围见[手册](../docs/OPERATIONS.md)。未勾选任务仍是后续工作。
+更新：2026-10-07。组织：[vrchat-cyber-cemetery](https://github.com/vrchat-cyber-cemetery)。GH-00完成，当前上线同仓库投稿／网页试点，范围见[手册](../docs/OPERATIONS.md)。状态快照见[2026-10-07证据](evidence/status-2026-10-07.json)。
 
 ## 1. 仓库、工作区与交付范围
 
@@ -92,7 +92,7 @@ App私钥仅存主仓库AUTOMATION_APP_PRIVATE_KEY Secret；Client ID放AUTOMATI
 - [ ] GH01-02 根据config生成真实站点配置与577固定地址清单，供world编辑器工具导入。
 - [x] GH01-03 首页、投稿／评审指南及世界未上线提示；不输出虚构世界ID。
 - [ ] GH01-04 空目录、64区概要、512小型无图组包及HTTP直链检查。
-- [ ] GH01-05 启用三个Pages，设置标签、Issue模板和角色；开放之前保持入口提示明确。
+- [x] GH01-05 启用主Pages，设置投稿标签、Issue模板、CODEOWNERS和世界未上线提示；两个数据Pages待图文包构建后启用。
 
 出口：主站与两数据站可访问，空协议数据稳定，地址无重定向。
 
@@ -100,7 +100,7 @@ App私钥仅存主仓库AUTOMATION_APP_PRIVATE_KEY Secret；Client ID放AUTOMATI
 
 - [x] GH02-01 Issue Form只必填埋葬对象、类型和公开／授权声明；标题可自动建议，其余可选。
 - [x] GH02-02 textarea拖图／粘贴附件，允许纯文字后补图；不要求用户JSON或Fork。
-- [ ] GH02-03 issue-intake生成结构化草稿与App PR；Issue用固定评论返回可读错误和进度。
+- [ ] GH02-03 same_repository试点已完成Issue校验、固定回执和维护者指令；结构化草稿PR和App自动化待GitHub App注册后完成。
 - [ ] GH02-04 同Issue编辑更新同草稿，审核绑定修订与PR SHA，新修订使旧批准失效。
 - [ ] GH02-05 核验人物同意、图片授权、角色权限和利益回避；举报／撤下／恢复各有入口。
 
@@ -129,7 +129,7 @@ App私钥仅存主仓库AUTOMATION_APP_PRIVATE_KEY Secret；Client ID放AUTOMATI
 
 ### GH-05 额度与有效评审
 
-- [x] GH05-01 GitHub数字ID成员注册与一次性初始1次，不因改名／换绑重新领取。
+- [x] GH05-01 GitHub数字ID成员注册与一次性初始1次，不因改名／换绑重新领取；已覆盖初始授予与创建消费。
 - [ ] GH05-02 认领评审任务、提交结构化意见和独立确认；赞成／拒绝使用同标准，单投稿最多2个奖励任务。
 - [ ] GH05-03 三次有效贡献一次兑换，唯一事件防重复／拆评论刷奖，不按邀请人数发放。
 - [x] GH05-04 初始授予／创建消费账本与最新状态接纳，entry／墓位／消费同一Git变更落地；评审奖励事件仍后续实现。
@@ -141,10 +141,10 @@ App私钥仅存主仓库AUTOMATION_APP_PRIVATE_KEY Secret；Client ID放AUTOMATI
 ### GH-06 分享、回执和定位
 
 - [x] GH06-01 稳定分享页无需登录可读，提供创建、评审、参观和举报指引。
-- [ ] GH06-02 区分投稿回执／发布回执，成功后给标题、ID、分享、真实世界入口、发布序号和定位码。
+- [ ] GH06-02 投稿回执已实现，发布回执代码已实现但没有真实published条目证据；真实世界入口仍为空，待发布闭环验收。
 - [x] GH06-03 01-01～64-64短码及内部减1映射，页面四步指引与未同步解释。
 - [x] GH06-04 隐藏／撤下的稳定URL为通用不可用页，去掉身份、正文、图和专属预览。
-- [ ] GH06-05 新手完整旅程测试；实际世界到达与PCVR读图交给Unity侧验收。
+- [ ] GH06-05 页面新手填写和长文本路径已完成本地／线上检查；真实GitHub发布回执、世界入口和PCVR到达待验收。
 
 出口：新手从表单到回执，再按码找到正确位置；未发布不会被误告成功。
 

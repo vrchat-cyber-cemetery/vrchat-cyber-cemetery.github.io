@@ -1,0 +1,26 @@
+{
+  "date": "2026-10-07",
+  "repository": "vrchat-cyber-cemetery.github.io",
+  "completed": {
+    "GH-00": "four public repositories, migration, initial CI and clean checkout",
+    "GH-01": ["GH01-03 main site, guide and world-not-live notice", "GH01-05 main Pages, labels, Issue templates and CODEOWNERS"],
+    "GH-02": ["GH02-01 Issue Forms", "GH02-02 text-only and attachment-oriented submission flow", "same_repository intake validation and receipt pilot"],
+    "GH-05": ["GH05-01 GitHub numeric member identity and one-time initial credit", "GH05-04 idempotent initial grant and creation consumption"],
+    "GH-06": ["GH06-01 public share pages and guides", "GH06-03 public location code parsing and guidance", "GH06-04 withdrawn/unavailable page behavior"]
+  },
+  "partial": {
+    "GH-02": "The pilot replies on the original Issue and writes approved state directly; App-generated draft PRs are not enabled.",
+    "GH-06": "The publishing receipt updater exists, but no real published entry has been accepted and deployed; the VRChat world URL is intentionally empty."
+  },
+  "not_started": ["GH-01-01", "GH-01-02", "GH-01-04", "GH-03", "GH-04", "GH-05-02", "GH-05-03", "GH-05-05", "GH-05-06", "GH-06-05", "GH-07"],
+  "verification": {
+    "local_business_and_config_tests": 34,
+    "protocol_model_checks": 30,
+    "pages_deployments": "successful",
+    "ci": "successful",
+    "real_vrchat_world": false,
+    "real_published_entry": false,
+    "github_app_registered": false,
+    "review_credit_exchange_enabled": false
+  }
+}
