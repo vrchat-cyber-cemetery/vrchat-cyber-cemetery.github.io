@@ -1,6 +1,6 @@
 # GitHub App一次性设置
 
-状态：尚未注册／安装；GH-00基础CI不需要App。GH-02／GH-04自动化启用前完成本设置。
+状态：已于2026-10-07注册并安装（App ID 5219672，installation 168744732，覆盖主站与两个分片、不含world）；webhook关闭，变量与Secret已导入主仓库，[证据](evidence/automation-app-2026-10-07.json)。第3节合成验证与App模式工作流仍待实现。
 
 ## 1. 组织后台注册
 

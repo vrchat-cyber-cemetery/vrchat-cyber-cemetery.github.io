@@ -52,7 +52,7 @@
 
 App私钥仅存主仓库AUTOMATION_APP_PRIVATE_KEY Secret；Client ID放AUTOMATION_APP_CLIENT_ID变量。分片下载公开、已批准的构建档案并校验清单，不需要复制私钥。注册步骤见 [App设置](GITHUB-APP-SETUP.md)。
 
-当前CLI缺少admin:org，首轮不修改组织级Actions策略；仓库级配置按已有repo权限完成。App注册安装通过组织后台操作，当前尚未执行。[Token范围](https://docs.github.com/en/actions/concepts/security/github_token) · [App Token Action](https://github.com/actions/create-github-app-token)
+当前CLI缺少admin:org，首轮不修改组织级Actions策略；仓库级配置按已有repo权限完成。App已于2026-10-07注册安装到主仓库与两个分片（不含world），见[App证据](evidence/automation-app-2026-10-07.json)；App模式投稿PR与跨仓库发布工作流仍待实现。[Token范围](https://docs.github.com/en/actions/concepts/security/github_token) · [App Token Action](https://github.com/actions/create-github-app-token)
 
 ## 4. 工作流与状态契约
 

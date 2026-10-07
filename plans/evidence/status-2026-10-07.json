@@ -10,15 +10,36 @@
       "GH01-04 empty catalog, 64 region summaries with 8 group references each, 512 metadata-only packs deployed on both shard Pages and verified by live HTTP direct-link check (577/577, 0 redirects, 0 hash drift)",
       "GH01-05 main Pages, labels, Issue templates and CODEOWNERS; both data Pages now live in workflow mode"
     ],
-    "GH-02": ["GH02-01 Issue Forms", "GH02-02 text-only and attachment-oriented submission flow", "same_repository intake validation and receipt pilot"],
-    "GH-05": ["GH05-01 GitHub numeric member identity and one-time initial credit", "GH05-04 idempotent initial grant and creation consumption"],
-    "GH-06": ["GH06-01 public share pages and guides", "GH06-03 public location code parsing and guidance", "GH06-04 withdrawn/unavailable page behavior"]
+    "GH-02": [
+      "GH02-01 Issue Forms",
+      "GH02-02 text-only and attachment-oriented submission flow",
+      "same_repository intake validation and receipt pilot"
+    ],
+    "GH-05": [
+      "GH05-01 GitHub numeric member identity and one-time initial credit",
+      "GH05-04 idempotent initial grant and creation consumption"
+    ],
+    "GH-06": [
+      "GH06-01 public share pages and guides",
+      "GH06-03 public location code parsing and guidance",
+      "GH06-04 withdrawn/unavailable page behavior"
+    ],
+    "setup": "GitHub App registered, installed on main plus both shards, credentials imported (evidence/automation-app-2026-10-07.json)"
   },
   "partial": {
-    "GH-02": "The pilot replies on the original Issue and writes approved state directly; App-generated draft PRs are not enabled.",
+    "GH-02": "same_repository intake pilot runs today; the App is registered and its token chain is verified, but App-mode draft PR automation is not implemented yet.",
     "GH-06": "The publishing receipt updater exists, but no real published entry has been accepted and deployed; the VRChat world URL is intentionally empty."
   },
-  "not_started": ["GH-03", "GH-04", "GH-05-02", "GH-05-03", "GH-05-05", "GH-05-06", "GH-06-05", "GH-07"],
+  "not_started": [
+    "GH-03",
+    "GH-04",
+    "GH-05-02",
+    "GH-05-03",
+    "GH-05-05",
+    "GH-05-06",
+    "GH-06-05",
+    "GH-07"
+  ],
   "verification": {
     "local_business_and_config_tests": 45,
     "protocol_model_checks": 30,
@@ -27,7 +48,7 @@
     "ci": "successful",
     "real_vrchat_world": false,
     "real_published_entry": false,
-    "github_app_registered": false,
+    "github_app_registered": true,
     "review_credit_exchange_enabled": false
   }
 }

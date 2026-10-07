@@ -32,7 +32,12 @@ test("real rewards remain disabled until independent confirmation is possible", 
   const config = fresh(); config.policy.real_rewards_enabled = true;
   assert(validateConfigurations(config).some(error => error.includes("independent")));
 });
-test("intake cannot be enabled while the App is unregistered", () => {
-  const config = fresh(); config.policy.automatic_intake_enabled = true; config.policy.intake_mode = "app";
+test("app-mode intake stays blocked while the App is unregistered", () => {
+  const config = fresh(); config.policy.automatic_intake_enabled = true; config.policy.intake_mode = "app"; config["automation-app"].status = "not_registered";
   assert(validateConfigurations(config).some(error => error.includes("ready")));
+});
+test("installed App satisfies the registration gate for app-mode intake", () => {
+  const config = fresh(); config.policy.automatic_intake_enabled = true; config.policy.intake_mode = "app";
+  const errors = validateConfigurations(config);
+  assert(!errors.some(error => error.includes("ready")), "registered App must not be reported as unregistered: " + errors.join("; "));
 });

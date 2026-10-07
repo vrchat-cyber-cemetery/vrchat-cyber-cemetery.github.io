@@ -1,0 +1,47 @@
+{
+  "date": "2026-10-07",
+  "task": "GitHub App one-time setup completed (GITHUB-APP-SETUP.md sections 1-2)",
+  "app": {
+    "name": "Cyber Cemetery Automation",
+    "slug": "cyber-cemetery-automation",
+    "app_id": 5219672,
+    "client_id": "Iv23li6Pn8MbdB7FX13s",
+    "owner": "vrchat-cyber-cemetery",
+    "webhook_enabled": false,
+    "homepage": "https://github.com/vrchat-cyber-cemetery",
+    "permissions": {
+      "metadata": "read",
+      "contents": "write",
+      "pull_requests": "write",
+      "issues": "write",
+      "actions": "write"
+    }
+  },
+  "installation": {
+    "id": 168744732,
+    "account": "vrchat-cyber-cemetery",
+    "repositories": [
+      "vrchat-cyber-cemetery/vrchat-cyber-cemetery.github.io",
+      "vrchat-cyber-cemetery/world-data-0",
+      "vrchat-cyber-cemetery/world-data-1"
+    ],
+    "world_excluded": true
+  },
+  "credentials": {
+    "variable AUTOMATION_APP_CLIENT_ID": "set in vrchat-cyber-cemetery.github.io via gh CLI",
+    "secret AUTOMATION_APP_PRIVATE_KEY": "set in vrchat-cyber-cemetery.github.io via gh CLI stdin",
+    "private_key_in_git": false
+  },
+  "verification": {
+    "get_app": "200, permissions match config exactly",
+    "installation_access_token": "201 created",
+    "installation_repositories": "200, exactly the three configured repositories",
+    "sudo_confirmation": "completed by the organization owner in Chrome",
+    "method": "browser automation of the GitHub settings UI plus gh CLI for secret import"
+  },
+  "not_yet_done": [
+    "App-mode draft PR workflow (GH02-03 remaining) still needs implementation",
+    "synthetic Issue App PR trigger and shard deployment verification (setup doc section 3)",
+    "real review rewards remain disabled (pilot-v1)"
+  ]
+}
