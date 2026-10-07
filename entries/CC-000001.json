@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "id": "CC-000001",
+  "status": "published",
+  "title": "这里埋葬了大黄猫的成熟稳重",
+  "buried_type": "event",
+  "buried_subject": "大黄猫的成熟稳重",
+  "epitaph": "虚拟世界不需要成熟稳重的自己,\n开心就好。",
+  "story": "",
+  "date_note": "",
+  "tags": [],
+  "links": [],
+  "players": [],
+  "images": {
+    "main": null,
+    "memorial": [],
+    "avatars": []
+  },
+  "slot": 0,
+  "locator": "01-01",
+  "creator_id": 11071219,
+  "creator_login": "Ero-Cat",
+  "issue_number": 2,
+  "request_issue_number": 2,
+  "approved_revision": "61b955cfaf08c65db5b8715c0cc49bbbe4653b1caffb56d718444e233f7b8d07",
+  "approved_by": null,
+  "updated_at": "2026-10-07T11:02:04.527Z",
+  "publication_sequence": 1,
+  "world_status": "awaiting_world"
+}
