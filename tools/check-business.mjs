@@ -10,6 +10,8 @@ const entry = ajv.compile(schema("entry"));
 const member = ajv.compile(schema("member"));
 const ledgerEvent = ajv.compile(schema("ledger-event"));
 const ledgerOperation = ajv.compile(schema("ledger-operation"));
+const review = ajv.compile(schema("review"));
+const allocation = ajv.compile(schema("allocation"));
 const state = JSON.parse(fs.readFileSync(path.join(root, "data/state.json"), "utf8"));
 const slots = new Set();
 for (const record of Object.values(state.entries)) {
@@ -37,4 +39,18 @@ for (const name of operations) {
     if (!ledgerEvent(row)) throw new Error("Ledger event schema failed in " + name + " " + JSON.stringify(ledgerEvent.errors));
   }
 }
+const rewardedReviews = new Set();
+for (const name of fs.readdirSync(path.join(root, "reviews")).filter(name => name.endsWith(".json"))) {
+  const record = JSON.parse(fs.readFileSync(path.join(root, "reviews", name), "utf8"));
+  if (!review(record)) throw new Error("Review schema failed: " + name + " " + JSON.stringify(review.errors));
+  if (record.conflict_of_interest && record.rewarded) throw new Error("Conflicted review must never be rewarded: " + name);
+  if (record.rewarded) rewardedReviews.add(record.review_id);
+}
+const exchangedEvidence = new Set();
+for (const name of fs.readdirSync(path.join(root, "allocations")).filter(name => name.endsWith(".json"))) {
+  const record = JSON.parse(fs.readFileSync(path.join(root, "allocations", name), "utf8"));
+  if (!allocation(record)) throw new Error("Allocation schema failed: " + name + " " + JSON.stringify(allocation.errors));
+  if (record.reason === "review-exchange") for (const id of record.evidence || []) exchangedEvidence.add(id);
+}
+for (const id of rewardedReviews) if (!exchangedEvidence.has(id)) throw new Error("Rewarded review lacks an exchange allocation: " + id);
 console.log("PASS business source registry: " + slots.size + " entries, " + Object.keys(state.members).length + " members, " + operations.length + " ledger operations");

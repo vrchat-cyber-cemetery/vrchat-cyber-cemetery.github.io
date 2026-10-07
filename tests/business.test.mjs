@@ -5,6 +5,7 @@ import os from "node:os";
 import path from "node:path";
 import sharp from "sharp";
 import { parseSubmission, revisionOf, emptyState, acceptSubmission, changeVisibility, locatorOf, parseLocator } from "../lib/submissions.mjs";
+import { recordVerification } from "../lib/community.mjs";
 import { buildSite, renderEntry } from "../lib/site.mjs";
 import { normalizeImage, fetchImage } from "../lib/media.mjs";
 import { GitHub } from "../lib/github.mjs";
@@ -19,7 +20,8 @@ const fixture = () => ({
   body: "### 这里埋葬了什么\n\n一个未完成的项目\n\n### 对象类型\n\n项目或世界（project）\n\n### 自定义标题\n\n_No response_\n\n### 墓志铭\n\n我们认真地尝试过。\n\n### 故事\n\n这只是测试数据。\n\n### 公开与授权\n\n- [x] 我理解投稿、图片和Git历史会公开。\n- [x] 我具备文字和图片使用授权。\n- [x] 涉及他人时已取得同意，不捏造死亡或公开隐私。"
 });
 const draft = () => parseSubmission(fixture());
-const accepted = () => acceptSubmission(emptyState(), draft(), moderator, policy, noMedia, "2026-10-03T00:00:00.000Z");
+const verifiedState = () => recordVerification(emptyState(), 9, draft().revision, moderator, 123456, policy).state;
+const accepted = () => acceptSubmission(verifiedState(), draft(), moderator, policy, noMedia, "2026-10-03T00:00:00.000Z");
 
 test("native Issue Form normalizes a text-only non-player memorial", () => {
   const d = draft(); assert.equal(d.buried_type, "project"); assert.equal(d.players.length, 0); assert.equal(d.title, "这里埋葬了一个未完成的项目");
@@ -50,17 +52,19 @@ test("repeating the same accepted revision does not double charge", () => {
 });
 test("two creates against a one-credit latest state accept only one", () => {
   const r = accepted(), next = draft(); next.issue_number = 10; next.revision = revisionOf("another");
-  assert.throws(() => acceptSubmission(r.state, next, moderator, policy, noMedia), /剩余/); assert.equal(Object.keys(r.state.entries).length, 1);
+  const state10 = recordVerification(r.state, 10, next.revision, moderator, 123456, policy).state;
+  assert.throws(() => acceptSubmission(state10, next, moderator, policy, noMedia), /剩余/); assert.equal(Object.keys(r.state.entries).length, 1);
 });
 test("rename does not grant another initial credit", () => {
   const r = accepted(), next = draft(); next.author.login = "renamed"; next.issue_number = 11; next.revision = revisionOf("rename");
-  assert.throws(() => acceptSubmission(r.state, next, moderator, policy, noMedia), /剩余/);
+  const state11 = recordVerification(r.state, 11, next.revision, moderator, 123456, policy).state;
+  assert.throws(() => acceptSubmission(state11, next, moderator, policy, noMedia), /剩余/);
 });
 test("self approval is rejected before consuming credits", () => assert.throws(() => acceptSubmission(emptyState(), draft(), 123456, { ...policy, maintainers: [{ github_id: 123456 }] }, noMedia), /自己/));
 test("ordinary visitors cannot publish", () => assert.throws(() => acceptSubmission(emptyState(), draft(), 98765, policy, noMedia), /维护者/));
 test("approved edit retains location and does not consume creation credits", () => {
   const r = accepted(), next = draft(); next.entry_id = r.entry.id; next.issue_number = 12; next.revision = revisionOf("edit"); next.story = "修改后的测试";
-  const edited = acceptSubmission(r.state, next, moderator, policy, noMedia);
+  const edited = acceptSubmission(recordVerification(r.state, 12, next.revision, moderator, 123456, policy).state, next, moderator, policy, noMedia);
   assert.equal(edited.entry.locator, r.entry.locator); assert.equal(edited.state.members["123456"].credits, 0); assert.equal(edited.events.length, 0); assert.equal(edited.entry.request_issue_number, 12);
 });
 test("removal keeps location reserved and does not refund", () => {

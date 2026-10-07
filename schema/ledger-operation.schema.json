@@ -81,6 +81,59 @@
       ],
       "additionalProperties": false,
       "$comment": "Visibility envelope for hide, dispute, remove and restore."
+    },
+    {
+      "type": "object",
+      "properties": {
+        "operation_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "policy_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "issue_number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "revision": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "checks": {
+          "type": "object",
+          "properties": {
+            "consent": { "const": true },
+            "rights": { "const": true },
+            "roles": { "const": true },
+            "conflict": { "const": true }
+          },
+          "required": ["consent", "rights", "roles", "conflict"],
+          "additionalProperties": false
+        },
+        "verified_by": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "timestamp": {
+          "type": "string",
+          "maxLength": 40
+        }
+      },
+      "required": [
+        "operation_id",
+        "policy_version",
+        "issue_number",
+        "revision",
+        "checks",
+        "verified_by",
+        "timestamp"
+      ],
+      "additionalProperties": false,
+      "$comment": "Verification envelope recording the four maintainer checks that gate acceptance."
     }
   ]
 }

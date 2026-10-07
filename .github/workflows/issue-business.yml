@@ -11,8 +11,9 @@ jobs:
     if: github.event_name == 'issues'
     runs-on: ubuntu-latest
     permissions:
-      contents: read
+      contents: write
       issues: write
+      pull_requests: write
     concurrency:
       group: intake-${{ github.event.issue.number }}
       cancel-in-progress: false
@@ -26,15 +27,23 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci --ignore-scripts
+      - id: app-token
+        if: vars.AUTOMATION_APP_CLIENT_ID != ''
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
+        with:
+          app-id: ${{ vars.AUTOMATION_APP_CLIENT_ID }}
+          private-key: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}
       - run: node tools/issue-business.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APP_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
   moderation:
     if: github.event_name == 'issue_comment' && github.event.comment.user.type != 'Bot'
     runs-on: ubuntu-latest
     permissions:
       contents: write
       issues: write
+      pull_requests: write
       actions: write
     concurrency:
       group: community-acceptance
@@ -49,6 +58,13 @@ jobs:
           node-version: '24'
           cache: npm
       - run: npm ci --ignore-scripts
+      - id: app-token
+        if: vars.AUTOMATION_APP_CLIENT_ID != ''
+        uses: actions/create-github-app-token@fee1f7d63c2ff003460e3d139729b119787bc349 # v2.2.2
+        with:
+          app-id: ${{ vars.AUTOMATION_APP_CLIENT_ID }}
+          private-key: ${{ secrets.AUTOMATION_APP_PRIVATE_KEY }}
       - run: node tools/issue-business.mjs
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APP_TOKEN: ${{ steps.app-token.outputs.token || github.token }}
