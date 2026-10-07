@@ -1,0 +1,40 @@
+{
+  "date": "2026-10-07",
+  "task": "GH01-04 empty runtime data deployed and verified",
+  "main_site_commit": "023642b6c9360364547c3acb0ad1963b6e7f6424",
+  "shard_commits": {
+    "world-data-0": "3e2288664bb53271d4f4cb18c22eb6b8bb10d62c",
+    "world-data-1": "50f87fb859e38dfbbdbe1e838db8b7c9409aff98"
+  },
+  "packs": {
+    "count": 512,
+    "per_shard": 256,
+    "revision": "empty-v1",
+    "texture_bytes": 0,
+    "protocol": "CCPACK01 metadata-only header, texture length 0"
+  },
+  "deployment": {
+    "main_site": "https://vrchat-cyber-cemetery.github.io/ catalog.json + regions/00-63.json",
+    "world-data-0": "https://vrchat-cyber-cemetery.github.io/world-data-0/ packs/000-255.bin + manifest.json",
+    "world-data-1": "https://vrchat-cyber-cemetery.github.io/world-data-1/ packs/256-511.bin + manifest.json",
+    "pages_build_type": "workflow"
+  },
+  "http_direct_link_check": {
+    "date": "2026-10-07T03:20:12.818Z",
+    "total": 577,
+    "ok": 577,
+    "failed": 0,
+    "classes": {
+      "catalog": 1,
+      "regions": 64,
+      "packs": 512
+    },
+    "redirects_or_errors": []
+  },
+  "verification": {
+    "local_tests": 45,
+    "shard_pack_integrity": "sha256 + CCPACK01 header + index math verified in each shard CI",
+    "redirects": 0,
+    "hash_drift": 0
+  }
+}

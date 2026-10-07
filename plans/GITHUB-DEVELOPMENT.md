@@ -1,6 +1,6 @@
 # GitHub侧详细开发计划
 
-更新：2026-10-07。组织：[vrchat-cyber-cemetery](https://github.com/vrchat-cyber-cemetery)。GH-00完成，当前上线同仓库投稿／网页试点，范围见[手册](../docs/OPERATIONS.md)。状态快照见[2026-10-07证据](evidence/status-2026-10-07.json)。
+更新：2026-10-07。组织：[vrchat-cyber-cemetery](https://github.com/vrchat-cyber-cemetery)。GH-00完成，当前上线同仓库投稿／网页试点，范围见[手册](../docs/OPERATIONS.md)。GH-01全部完成：主站与两个数据分片Pages在线，577固定地址直链验证通过，见[运行时地址证据](evidence/runtime-addresses-2026-10-07.json)与[状态快照](evidence/status-2026-10-07.json)。
 
 ## 1. 仓库、工作区与交付范围
 
@@ -91,8 +91,8 @@ App私钥仅存主仓库AUTOMATION_APP_PRIVATE_KEY Secret；Client ID放AUTOMATI
 - [x] GH01-01 实现entry、member、review、ledger-event、allocation和publication的完整Schema，区分源数据／运行时导出。
 - [x] GH01-02 根据config生成真实站点配置与577固定地址清单，供world编辑器工具导入。
 - [x] GH01-03 首页、投稿／评审指南及世界未上线提示；不输出虚构世界ID。
-- [ ] GH01-04 空目录、64区概要、512小型无图组包及HTTP直链检查。
-- [x] GH01-05 启用主Pages，设置投稿标签、Issue模板、CODEOWNERS和世界未上线提示；两个数据Pages待图文包构建后启用。
+- [x] GH01-04 空目录、64区概要、512小型无图组包及HTTP直链检查。
+- [x] GH01-05 启用主Pages，设置投稿标签、Issue模板、CODEOWNERS和世界未上线提示；两个数据Pages已随空组包以workflow模式启用。
 
 出口：主站与两数据站可访问，空协议数据稳定，地址无重定向。
 
