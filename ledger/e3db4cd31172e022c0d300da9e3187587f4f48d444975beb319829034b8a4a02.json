@@ -1,0 +1,23 @@
+{
+  "operation_id": "publish:2:61b955cfaf08c65db5b8715c0cc49bbbe4653b1caffb56d718444e233f7b8d07",
+  "policy_version": "pilot-v1",
+  "issue_number": 2,
+  "approved_by": null,
+  "events": [
+    {
+      "kind": "initial-grant",
+      "member_id": 11071219,
+      "amount": 1,
+      "operation_id": "publish:2:61b955cfaf08c65db5b8715c0cc49bbbe4653b1caffb56d718444e233f7b8d07",
+      "timestamp": "2026-10-07T11:02:04.527Z"
+    },
+    {
+      "kind": "creation-consume",
+      "member_id": 11071219,
+      "amount": -1,
+      "entry_id": "CC-000001",
+      "operation_id": "publish:2:61b955cfaf08c65db5b8715c0cc49bbbe4653b1caffb56d718444e233f7b8d07",
+      "timestamp": "2026-10-07T11:02:04.527Z"
+    }
+  ]
+}
