@@ -1,11 +1,36 @@
 {
   "schema_version": 1,
-  "publication_sequence": 0,
-  "next_entry": 1,
+  "publication_sequence": 1,
+  "next_entry": 2,
   "next_review": 1,
   "next_allocation": 1,
-  "entries": {},
-  "members": {},
+  "entries": {
+    "CC-000001": {
+      "id": "CC-000001",
+      "slot": 0,
+      "status": "published",
+      "creator_id": 356054889,
+      "creator_login": "xiaohepeng38-svg",
+      "issue_number": 7
+    }
+  },
+  "members": {
+    "356054889": {
+      "schema_version": 1,
+      "github_id": 356054889,
+      "login": "xiaohepeng38-svg",
+      "credits": 0,
+      "initial_grant": true
+    }
+  },
   "review_tasks": {},
-  "operations": {}
+  "operations": {
+    "publish:7:5a87d234e22c97983db7cca54e37737def66d545e65fe083b826db50080892c8": "CC-000001"
+  },
+  "receipts": {
+    "7": {
+      "entry_id": "CC-000001",
+      "approved_revision": "5a87d234e22c97983db7cca54e37737def66d545e65fe083b826db50080892c8"
+    }
+  }
 }
